@@ -15,5 +15,5 @@ module.exports = function (grunt) {
 };
 */
 module.exports = function (grunt) {
-	grunt.registerTask('default', ['compileAssets', 'linkAssets',  'watch']);
+	grunt.registerTask('prod', ['compileAssets']);
 };
