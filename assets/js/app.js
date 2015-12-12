@@ -8,9 +8,9 @@ var courtresApp = angular.module('courtresApp', [
 
 courtresApp.config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.when('/ng', {
-      templateUrl: '/templates/todo.html',
-      controller: 'NewPersonCtrl'
+    $routeProvider.when('/ng/user/new', {
+      templateUrl: '/templates/updatePerson.html',
+      controller: 'PersonCtrl'
     }).when('/', {
       templateUrl: '/templates/homepage.html',
       controller: 'NewPersonCtrl'
@@ -20,9 +20,11 @@ courtresApp.config(['$routeProvider',
     })
   }]);
 
-courtresApp.controller('NewPersonCtrl', ['$scope', 'Restangular', function($scope, Restangular){
-    $scope.addPerson = function(){
-        //$scope.todo = "A";
+courtresApp.controller('PersonCtrl', ['$scope', 'Restangular', function($scope, Restangular){
+    var basePerson = Restangular.all('person');
+    $scope.update = function(person){
+        basePerson.post(person);
+        //basePerson.save();
     }
 }]);
 
