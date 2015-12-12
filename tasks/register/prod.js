@@ -1,3 +1,4 @@
+/*
 module.exports = function (grunt) {
 	grunt.registerTask('prod', [
 		'compileAssets',
@@ -11,4 +12,8 @@ module.exports = function (grunt) {
 		'sails-linker:prodStylesJade',
 		'sails-linker:devTplJade'
 	]);
+};
+*/
+module.exports = function (grunt) {
+	grunt.registerTask('default', ['compileAssets', 'linkAssets',  'watch']);
 };
