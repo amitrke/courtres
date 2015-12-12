@@ -1,17 +1,32 @@
 'use strict';
 
-var courtresApp = angular.module('courtresApp', ['ngRoute', 'ui.bootstrap']);
+var courtresApp = angular.module('courtresApp', [
+    'ngRoute',
+    'ui.bootstrap',
+    'restangular'
+]);
+
 courtresApp.config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.when('/', {
+    $routeProvider.when('/ng', {
       templateUrl: '/templates/todo.html',
-      controller: 'TodoCtrl'
+      controller: 'NewPersonCtrl'
+    }).when('/', {
+      templateUrl: '/templates/homepage.html',
+      controller: 'NewPersonCtrl'
     }).otherwise({
       redirectTo: '/',
       caseInsensitiveMatch: true
     })
   }]);
 
+courtresApp.controller('NewPersonCtrl', ['$scope', 'Restangular', function($scope, Restangular){
+    $scope.addPerson = function(){
+        //$scope.todo = "A";
+    }
+}]);
+
+/*
 courtresApp.controller('TodoCtrl', ['$scope', '$rootScope', 'TodoService', function($scope, $rootScope, TodoService) {
   $scope.formData = {};
   $scope.todos = [];
@@ -33,3 +48,4 @@ courtresApp.controller('TodoCtrl', ['$scope', '$rootScope', 'TodoService', funct
     });
   }
 }]);
+*/

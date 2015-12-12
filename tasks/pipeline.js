@@ -29,6 +29,9 @@ var jsFilesToInject = [
   '/bower_components/angular-route/angular-route.js',
   '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
   '/bower_components/bootstrap/dist/js/boostrap.js',
+    '/bower_components/restangular/dist/restangular.js',
+    '/bower_components/lodash/lodash.js',
+    
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 

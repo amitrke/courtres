@@ -1,3 +1,4 @@
+/*
 courtresApp.service('TodoService', function($http, $q) {
   return {
     'getTodos': function() {
@@ -28,3 +29,4 @@ courtresApp.service('TodoService', function($http, $q) {
       return defer.promise;
     }
 }});
+*/
