@@ -1,4 +1,3 @@
-/*
 module.exports = function (grunt) {
 	grunt.registerTask('prod', [
 		'compileAssets',
@@ -11,11 +10,5 @@ module.exports = function (grunt) {
 		'sails-linker:prodJsJade',
 		'sails-linker:prodStylesJade',
 		'sails-linker:devTplJade'
-	]);
-};
-*/
-module.exports = function (grunt) {
-	grunt.registerTask('prod', [
-		'compileAssets'
 	]);
 };
