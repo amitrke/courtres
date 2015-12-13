@@ -14,8 +14,7 @@ module.exports = {
       sex: {
         type: 'string',
         enum: ['M', 'F']
-      },
-      dateOfBirth:'DATE'
+      }
   }
 };
 
