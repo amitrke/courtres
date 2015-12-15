@@ -8,14 +8,18 @@ var courtresApp = angular.module('courtresApp', [
 
 courtresApp.config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.when('/ng/:facility/user/new', {
+    $routeProvider.when('/ng/user/new', {
       templateUrl: '/templates/updatePerson.html',
       controller: 'PersonCtrl'
-    }).when('/', {
+    }).when('/home', {
       templateUrl: '/templates/homepage.html',
-      controller: 'NewPersonCtrl'
-    }).otherwise({
-      redirectTo: '/',
+      controller: 'FacilityCtrl'
+    }).when('/ng/facility/:facilityid', {
+      templateUrl: '/templates/facilityHome.html',
+      controller: 'FacilityHomeCtrl'
+    }).
+    otherwise({
+      redirectTo: '/home',
       caseInsensitiveMatch: true
     })
   }]);
@@ -27,6 +31,27 @@ courtresApp.controller('PersonCtrl', ['$scope', '$routeParams', 'Restangular', f
         basePerson.post(person);
     }
     
+}]);
+
+courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular){
+    var baseFacility = Restangular.all('facility');
+    
+    baseFacility.getList().then(function(facilities) {
+      $scope.allFacilities = facilities;
+    });
+
+    $scope.update = function(facility){
+        baseFacility.post(facility);
+    }
+    
+}]);
+
+courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular){
+    var baseFacility = Restangular.all('facility');
+    
+    baseFacility.get($routeParams.facilityid).then(function(facility) {
+      $scope.facility = facility;
+    });
 }]);
 
 /*
