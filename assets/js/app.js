@@ -52,6 +52,10 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
     baseFacility.get($routeParams.facilityid).then(function(facility) {
       $scope.facility = facility;
     });
+    
+    $scope.login = function(person){
+        //Call login rest api.
+    }
 }]);
 
 /*
