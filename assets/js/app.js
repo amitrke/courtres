@@ -46,7 +46,7 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     
 }]);
 
-courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular){
+courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', '$http', function($scope, $routeParams, Restangular, $http){
     var baseFacility = Restangular.all('facility');
     
     baseFacility.get($routeParams.facilityid).then(function(facility) {
@@ -54,30 +54,23 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
     });
     
     $scope.login = function(person){
-        //Call login rest api.
+        $http({
+          method  : 'POST',
+          url     : '/person/login',
+          data    : $.param(person),  // pass in data as strings
+          headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
+         })
+         .success(function(data) {
+            console.log(data);
+        
+            if (!data.success) {
+              // if not successful, bind errors to error variables
+              $scope.errorName = data.errors.name;
+              $scope.errorSuperhero = data.errors.superheroAlias;
+            } else {
+              // if successful, bind success message to message
+              $scope.message = data.message;
+            }
+        });
     }
 }]);
-
-/*
-courtresApp.controller('TodoCtrl', ['$scope', '$rootScope', 'TodoService', function($scope, $rootScope, TodoService) {
-  $scope.formData = {};
-  $scope.todos = [];
-
-  TodoService.getTodos().then(function(response) {
-    $scope.todos = response;
-  });
-
-  $scope.addTodo = function() {
-    TodoService.addTodo($scope.formData).then(function(response) {
-      $scope.todos.push($scope.formData)
-      $scope.formData = {};
-    });
-  }
-
-  $scope.removeTodo = function(todo) {
-    TodoService.removeTodo(todo).then(function(response) {
-      $scope.todos.splice($scope.todos.indexOf(todo), 1)
-    });
-  }
-}]);
-*/

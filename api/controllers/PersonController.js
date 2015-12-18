@@ -8,12 +8,11 @@
 module.exports = {
     login: function (req, res) {
         
-        var username = req.query.name;
-        var password = req.query.password;
-        
+        var username = req.body.email;
+        var password = req.body.password;
         if (username != null && password != null){
             Person.find({})
-                .where({ username: username })
+                .where({ email: username })
                 .where({ password: password})
                 .limit(2)
                 .exec(function(err, persons) {
