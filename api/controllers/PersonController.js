@@ -7,18 +7,36 @@
 
 module.exports = {
     login: function (req, res) {
-        var count = "";
-        console.log('About to query for ' + req.query.name)
-        Person.find({})
-            .where({ name: req.query.name })
-          .limit(1)
-          .exec(function(err, persons) {
-            console.log('Found User with name ' + persons)
-        });
-        return res.send("Hi there!"+count+"<--");
-    },
-    bye: function (req, res) {
-        return res.redirect("http://www.sayonara.com");
+        
+        var username = req.query.name;
+        var password = req.query.password;
+        
+        if (username != null && password != null){
+            Person.find({})
+                .where({ username: username })
+                .where({ password: password})
+                .limit(2)
+                .exec(function(err, persons) {
+                    if (persons != null && persons.length > 0 ){
+                        if (persons.length > 1){
+                            console.log('We have more than one entry for Person' + username+", ideally there should be only one");
+                        }
+                        return res.json({
+                          auth: 'success'
+                        });
+                    }
+                    else{
+                        return res.json({
+                          auth: 'failure'
+                        });
+                    }
+                });
+        }
+        else{ //Incorrect input
+            return res.json({
+              error: 'Incorrect input.'
+            });
+        }
     }
 };
 
