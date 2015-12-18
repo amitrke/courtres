@@ -1,6 +1,4 @@
-# courtres
-
-Court Reservation application.
+# Court Reservation Application.
 
 This project is a work-in-progress, the first version should be completed by 15th Jan 2016.
 The application can be used by a sports facility to reserve courts for its members, some of the features include..
@@ -9,6 +7,7 @@ The application can be used by a sports facility to reserve courts for its membe
 * Checked in members can reserve the court using their smartphone or the facility admin can reserve court for them
 * After 20 mins ( or whatever time set for the facility) the system puts the members back into the queue for reservation.
 * The system logs out all members at the end of day, and they can't reserve the court using smartphone until then are checked in by the facility again.
+* Every court can be configured for time slots, and the system maintains a court reservation queue.
 
 There is a free OpenShift cloud hosted instance of this project, So you don't even have to worry about deployment.
 
