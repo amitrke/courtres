@@ -6,12 +6,14 @@
  */
 
 module.exports = {
-    hi: function (req, res) {
+    login: function (req, res) {
         var count = "";
+        console.log('About to query for ' + req.query.name)
         Person.find({})
+            .where({ name: req.query.name })
+          .limit(1)
           .exec(function(err, persons) {
             console.log('Found User with name ' + persons)
-            count=persons.length;
         });
         return res.send("Hi there!"+count+"<--");
     },
