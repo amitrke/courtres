@@ -2,11 +2,16 @@
     <h1>Welcome to {{facility.name}}</h1>
     <p></p>
 </div>
-<div class="input-group">
-  <span class="input-group-addon" id="basic-addon1">@</span>
-  <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
-</div>
-<input type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
-<span class="input-group-btn">
-    <button class="btn btn-default" type="button">Go!</button>
-</span>
+<form ng-controller="FacilityHomeCtrl">
+    <div class="alert alert-success" role="alert" ng-if="authRequest == 'success'">
+        <strong>Login success</strong>
+      </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">@</span>
+      <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1" ng-model="person.email">
+    </div>
+    <input type="text" class="form-control" placeholder="Password" aria-describedby="basic-addon1" ng-model="person.password">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="submit" ng-click="login(person)">Go!</button>
+    </span>
+</form>

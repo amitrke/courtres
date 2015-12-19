@@ -20,8 +20,10 @@ module.exports = {
                         if (persons.length > 1){
                             console.log('We have more than one entry for Person' + username+", ideally there should be only one");
                         }
+                        req.session.userId = persons[0].id;
                         return res.json({
-                          auth: 'success'
+                          auth: 'success',
+                          person: persons[0]
                         });
                     }
                     else{

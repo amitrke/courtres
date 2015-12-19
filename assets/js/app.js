@@ -61,15 +61,11 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
           headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
          })
          .success(function(data) {
-            console.log(data);
-        
-            if (!data.success) {
-              // if not successful, bind errors to error variables
-              $scope.errorName = data.errors.name;
-              $scope.errorSuperhero = data.errors.superheroAlias;
-            } else {
-              // if successful, bind success message to message
-              $scope.message = data.message;
+            if (data!=null && data.auth != null) { //Remove login form and show options.
+                $scope.authRequest = "success";
+                $scope.person = data.auth.person;
+            } else { //Show login failure
+                $scope.authRequest = "failure";
             }
         });
     }

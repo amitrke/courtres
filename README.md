@@ -1,6 +1,6 @@
 # Court Reservation Application.
 
-This project is a work-in-progress, the first version should be completed by 15th Jan 2016.
+This project is work-in-progress, the first version should be completed by 15th Jan 2016.
 The application can be used by a sports facility to reserve courts for its members, some of the features include..
 * Member signup
 * Facility to checkin members as they come to play
