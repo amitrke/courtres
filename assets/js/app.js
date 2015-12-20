@@ -17,12 +17,31 @@ courtresApp.config(['$routeProvider',
     }).when('/ng/facility/:facilityid', {
       templateUrl: '/templates/facilityHome.html',
       controller: 'FacilityHomeCtrl'
+    }).when('/member', {
+      templateUrl: '/templates/member.html',
+      controller: 'MemberCtrl'
     }).
     otherwise({
       redirectTo: '/home',
       caseInsensitiveMatch: true
     })
   }]);
+
+courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
+    
+    $scope.init = function(){
+        var facility = dataService.getKV('facility');
+        var user = dataService.getKV('user');
+        if (facility == null || user == null){
+            $location.path( "/" );
+        }
+        else{
+            $scope.facility = dataService.getKV('facility');
+            $scope.user = dataService.getKV('user');
+        }
+    };
+    
+}]);
 
 courtresApp.controller('PersonCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular){
     var basePerson = Restangular.all('person');
@@ -46,12 +65,41 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     
 }]);
 
-courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', '$http', function($scope, $routeParams, Restangular, $http){
-    var baseFacility = Restangular.all('facility');
+courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', '$http', 'dataService', '$location',
+                                            function($scope, $routeParams, Restangular, $http, dataService, $location){
     
-    baseFacility.get($routeParams.facilityid).then(function(facility) {
-      $scope.facility = facility;
-    });
+    $scope.init = function(){
+        
+        var baseFacility = Restangular.all('facility');
+    
+        baseFacility.get($routeParams.facilityid).then(function(facility) {
+            $scope.facility = facility;
+            dataService.setKV('facility', facility);
+        });
+
+        if (dataService.getKV('user') != null && dataService.getKV('facility') != null){
+            $location.path( "/member" );
+        }
+        else{
+            $http({
+              method  : 'GET',
+              url     : '/person/getSession'
+             })
+             .success(function(data) {
+                if (data!=null) {
+                    if (data.session.facility != null){
+                        dataService.setKV('facility', data.session.facility);
+                    }
+                    if (data.session.user != null){
+                        dataService.setKV('user', data.session.user);
+                        $location.path( "/member" );
+                    }
+                } else { //Show login failure
+                    console.log("Error getting session details.");
+                }
+            });
+        }
+    }
     
     $scope.login = function(person){
         $http({
@@ -61,12 +109,15 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
           headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
          })
          .success(function(data) {
-            if (data!=null && data.auth != null) { //Remove login form and show options.
+            if (data!=null && data.auth == 'success') { //Remove login form and show options.
                 $scope.authRequest = "success";
                 $scope.person = data.auth.person;
+                dataService.setKV('user', data.auth.person);
+                $location.path( "/member" );
+                
             } else { //Show login failure
                 $scope.authRequest = "failure";
             }
         });
-    }
+    };
 }]);
