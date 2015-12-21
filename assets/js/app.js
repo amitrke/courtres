@@ -102,20 +102,13 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
     }
     
     $scope.login = function(person){
-        $http({
-          method  : 'POST',
-          url     : '/person/login',
-          data    : $.param(person),  // pass in data as strings
-          headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
-         })
-         .success(function(data) {
-            if (data!=null && data.auth == 'success') { //Remove login form and show options.
+        io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
+            if (resData != null && resData.length > 0){
                 $scope.authRequest = "success";
-                $scope.person = data.auth.person;
-                dataService.setKV('user', data.auth.person);
+                dataService.setKV('user', resData[0]);
                 $location.path( "/member" );
-                
-            } else { //Show login failure
+            }
+            else{
                 $scope.authRequest = "failure";
             }
         });
