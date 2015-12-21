@@ -11,9 +11,6 @@ module.exports = {
         
         var username = req.body.email;
         var password = req.body.password;
-        var facilityid = req.params.facilityid;
-        
-        console.log('facilityid:'+facilityid);
         
         if (username != null && password != null){
             Person.find({})
@@ -26,7 +23,6 @@ module.exports = {
                             console.log('We have more than one entry for Person' + username+", ideally there should be only one");
                         }
                         req.session.user = persons[0];
-                        req.session.facility = {id:facilityid};
                             
                         return res.json({
                           auth: 'success',
@@ -52,6 +48,5 @@ module.exports = {
             session: req.session
         });
     }
-}
 };
 
