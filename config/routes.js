@@ -45,9 +45,4 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  
-  'POST /person/login':{
-		controller: "PersonController", action: "login"
-	}
-	
 };

@@ -38,6 +38,17 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
+            
+            io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
+            if (resData != null && resData.length > 0){
+                    $scope.authRequest = "success";
+                    dataService.setKV('user', resData[0]);
+                    $location.path( "/member" );
+                }
+                else{
+                    $scope.authRequest = "failure";
+                }
+            });
         }
     };
     

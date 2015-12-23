@@ -8,7 +8,8 @@
 module.exports = {
 
   attributes: {
-      personfacility:'Personfacility',
+      personid:'STRING',
+      facilityid:'STRING',
       inTime:'DATETIME',
       outTime:'DATETIME'
   }
