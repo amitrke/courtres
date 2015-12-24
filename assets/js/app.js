@@ -8,13 +8,13 @@ var courtresApp = angular.module('courtresApp', [
 
 courtresApp.config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.when('/ng/user/new', {
+    $routeProvider.when('/user/new', {
       templateUrl: '/templates/updatePerson.html',
       controller: 'PersonCtrl'
     }).when('/home', {
       templateUrl: '/templates/homepage.html',
       controller: 'FacilityCtrl'
-    }).when('/ng/facility/:facilityid', {
+    }).when('/facility/:facilityid', {
       templateUrl: '/templates/facilityHome.html',
       controller: 'FacilityHomeCtrl'
     }).when('/member', {
@@ -40,7 +40,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
             $scope.user = dataService.getKV('user');
             
             io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
-            if (resData != null && resData.length > 0){
+                if (resData != null && resData.length > 0){
                     $scope.authRequest = "success";
                     dataService.setKV('user', resData[0]);
                     $location.path( "/member" );
