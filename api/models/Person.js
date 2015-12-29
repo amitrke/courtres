@@ -11,16 +11,10 @@ module.exports = {
       name:'STRING',
       email:'STRING',
       password:'STRING',
-      type:'STRING',
       
       sex: {
         type: 'string',
         enum: ['M', 'F']
-      },
-      
-      facilities:{
-        collection:'facility',
-        via:'members'
       }
   }
 };

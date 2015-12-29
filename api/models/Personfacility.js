@@ -8,9 +8,9 @@
 module.exports = {
 
   attributes: {
-      person:'Person',
-      facility:'Facility',
-      role:'Role'
+      person:'STRING',
+      facility:'STRING',
+      role:'STRING'
   }
 };
 

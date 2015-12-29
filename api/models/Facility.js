@@ -9,11 +9,7 @@ module.exports = {
 
   attributes: {
       name:'STRING',
-      noOfCourts:'INTEGER',
-      members:{
-          collection:'person',
-          via:'facilities'
-      }
+      noOfCourts:'INTEGER'
   }
 };
 
