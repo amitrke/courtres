@@ -12,17 +12,65 @@
 module.exports.bootstrap = function(cb) {
     
     var facilities = [{"name":'BadmintonNC', "noOfCourts":7}];
+	var timeslots = [
+		{'startMin':0}, 
+		{'startMin':20}, 
+		{'startMin':40}
+	];
     var persons = [
-        {"name":'Amit', "email":'amitrke@gmail.com', "password":'abcd'},
-		    {"name":'Dennis', "email":'dennis@gmail.com', "password":'abcd'}
+        {"name":'Amit', "email":'amitrke@gmail.com', "password":'abcd', 'type':"member"},
+		{"name":'Dennis', "email":'dennis@gmail.com', "password":'abcd', 'type':"admin"}
     ];
+	var courts = [
+		{'name':"1", 'isEnabled':true, 'comments':"Open Play", 'maxNumberOfPeople':4},
+		{'name':"2", 'isEnabled':true, 'comments':"Open Play", 'maxNumberOfPeople':4},
+		{'name':"3", 'isEnabled':true, 'comments':"Open Play", 'maxNumberOfPeople':4},
+		{'name':"4", 'isEnabled':true, 'comments':"Open Play", 'maxNumberOfPeople':4},
+		{'name':"5", 'isEnabled':true, 'comments':"Open Play", 'maxNumberOfPeople':4},
+		{'name':"6", 'isEnabled':true, 'comments':"Reserved for Kids 7 PM onwards, don't register here, you could be kicked out.", 'maxNumberOfPeople':4},
+		{'name':"7", 'isEnabled':true, 'comments':"Reserved for training, don't register here, you could be kicked out.", 'maxNumberOfPeople':4}
+	];
     
+	var objFacilities = [];
+	var objCourts = [];
+	
+	var afterTimeslotsCreation = function(err, newTimeslots){
+		sails.log.info("Associating timeslot records..");
+		while (objCourts.length){
+			var thisCourt = objCourts.pop();
+			thisCourt.timeSlots.add(newTimeslots);
+			thisCourt.save();
+		}
+		cb();
+	};
+	
+	var afterCourtsAssociation = function(){
+		sails.log.info('Creating Timeslot records..');
+		Timeslots.create(timeslots).exec(afterTimeslotsCreation);
+	};
+	
+	var afterCourtsCreation = function(err, newCourts){
+		sails.log.info('Associating Court records..');
+		while (newCourts.length){
+			var thisCourt = newCourts.pop();
+			thisCourt.facility = objFacilities[0].id;
+			thisCourt.save();
+			objCourts.push(thisCourt);
+		}
+		afterCourtsAssociation();
+	};
+	
+	var afterPersonAssoc = function(){
+		sails.log.info('Creating Court records..');
+		Courts.create(courts).exec(afterCourtsCreation);
+	};
+	
     Facility.count().exec(function(err, count) {
         if(err) {
           sails.log.error('Error occured while getting a count of facility records.');
-            cb(err);
+          cb(err);
         }
-        if(count == 0) {
+        else if(count == 0) {
             sails.log.info('Creating facilities..');
             Facility.create(facilities).exec(afterFacilities);
         }
@@ -32,7 +80,10 @@ module.exports.bootstrap = function(cb) {
         }
     });
 	
-	var afterFacilities = function(){
+	var afterFacilities = function(err, newFacilities){
+		while (newFacilities.length)
+			objFacilities.push(newFacilities.pop())
+		
         Person.count().exec(function(err,count){
 			if(err){
 				sails.log.error('Error while getting a count of person records.');
@@ -49,53 +100,13 @@ module.exports.bootstrap = function(cb) {
 		});
     };
 	
-	var afterPerson = function(){
-		Personfacility.count().exec(function(err,count){
-			if(err){
-				sails.log.error('Error while getting a count of personfacility records.');
-				cb(err);
-			}else if (count == 0){
-				sails.log.info('Creating Personfacility records..');
-				
-				Facility.find({'name':"BadmintonNC"}).exec(function findFac(err, results){
-					if (err){ //TODO: Probably if condition is not needed
-						sails.log.error('Error while retreving facility data:'+err);
-						cb();
-					}
-					else if (results.length > 0){
-						var facilityId = results[0].id;
-						
-						Person.find({'name':"Amit"}).exec(function findPer(err, results){
-							if(err){ //TODO: Probably if condition is not needed
-								sails.log.error('Error while retreving facility data:'+err);
-								cb();
-							}
-							else if (results.length > 0){
-								var personID = results[0].id;
-								var personfacilityarray = [];
-								personfacilityarray.push({'personid':personID, 'facilityid':facilityId, 'role':'member'});
-								Personfacility.create(personfacilityarray).exec(afterPersonFacility);
-							}
-							else{
-								sails.log.error('Error while retreving person data.');
-								cb();
-							}
-						});
-					}
-					else{
-						sails.log.error('Error while retreving facility data.');
-						cb();
-					}
-				});
-			}
-			else{
-				sails.log.info('Already have Personfacility data.');
-				cb();
-			}
-		});
-	};
-	
-	var afterPersonFacility = function(){
-		cb();
+	var afterPerson = function(err, newPersons){
+		sails.log.info('Associating Person records..');
+		while (newPersons.length){
+			var thisPerson = newPersons.pop();
+			thisPerson.facilities.add(objFacilities[0].id);
+			thisPerson.save();
+		}
+		afterPersonAssoc();
 	};
 };

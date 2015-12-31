@@ -9,7 +9,17 @@ module.exports = {
 
   attributes: {
       name:'STRING',
-      facility:'Facility',
+      
+      facility:{
+          model:'facility',
+          via:'courts'
+	    },
+	    
+	    timeSlots:{
+  		    collection:'timeslots',
+          via:'startMin'
+  	  },
+  	  
       isEnabled:'BOOLEAN',
       comments:'STRING',
       maxNumberOfPeople:'INTEGER'
