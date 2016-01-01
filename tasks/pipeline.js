@@ -17,6 +17,7 @@ var tmpPath = '.tmp/public/';
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
     'bower_components/bootstrap/dist/css/bootstrap.css',
+    '/bower_components/select2/dist/css/select2.css',
   'styles/**/*.css'
 ];
 
@@ -30,6 +31,7 @@ var jsFilesToInject = [
   '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
   '/bower_components/bootstrap/dist/js/boostrap.js',
     '/bower_components/restangular/dist/restangular.js',
+    '/bower_components/select2/dist/js/select2.js',
     '/bower_components/lodash/lodash.js',
     
   // Load sails.io before everything else

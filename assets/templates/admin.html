@@ -1,0 +1,36 @@
+<div class="jumbotron" data-ng-init="init()">
+    <h2>Hey {{user.name}} ! (Admin)</h2>
+    <p></p>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Check-in Users</h3>
+	</div>
+	<div class="panel-body">
+	    <form ng-controller="FacilityHomeCtrl">
+	       <select id="allMembers" class="select2" multiple="multiple">
+    	      <option value="{{user.id}}" ng-repeat="user in allMembers">{{user.name}}</option>
+    	  </select>
+    	  
+	    </form>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Courts</h3>
+	</div>
+	<div class="panel-body">
+	  Panel content
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+	  <h3 class="panel-title">New User</h3>
+	</div>
+	<div class="panel-body">
+	  Panel content
+	</div>
+</div>

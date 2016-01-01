@@ -20,12 +20,37 @@ courtresApp.config(['$routeProvider',
     }).when('/member', {
       templateUrl: '/templates/member.html',
       controller: 'MemberCtrl'
+    }).when('/admin', {
+      templateUrl: '/templates/admin.html',
+      controller: 'AdminCtrl'
     }).
     otherwise({
       redirectTo: '/home',
       caseInsensitiveMatch: true
     })
   }]);
+
+courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
+    
+    $scope.init = function(){
+        var facility = dataService.getKV('facility');
+        var user = dataService.getKV('user');
+        if (facility == null || user == null){
+            $location.path( "/" );
+        }
+        else{
+            $scope.facility = dataService.getKV('facility');
+            $scope.user = dataService.getKV('user');
+        }
+    };
+    
+    var basePerson = Restangular.all('person');
+    
+    basePerson.getList().then(function(persons) {
+      $scope.allMembers = persons;
+    });
+    
+}]);
 
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     
@@ -38,17 +63,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
-            
-            io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
-                if (resData != null && resData.length > 0){
-                    $scope.authRequest = "success";
-                    dataService.setKV('user', resData[0]);
-                    $location.path( "/member" );
-                }
-                else{
-                    $scope.authRequest = "failure";
-                }
-            });
+			
         }
     };
     
@@ -91,33 +106,21 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
         if (dataService.getKV('user') != null && dataService.getKV('facility') != null){
             $location.path( "/member" );
         }
-        else{
-            $http({
-              method  : 'GET',
-              url     : '/person/getSession'
-             })
-             .success(function(data) {
-                if (data!=null) {
-                    if (data.session.facility != null){
-                        dataService.setKV('facility', data.session.facility);
-                    }
-                    if (data.session.user != null){
-                        dataService.setKV('user', data.session.user);
-                        $location.path( "/member" );
-                    }
-                } else { //Show login failure
-                    console.log("Error getting session details.");
-                }
-            });
-        }
     }
     
     $scope.login = function(person){
         io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
             if (resData != null && resData.length > 0){
                 $scope.authRequest = "success";
-                dataService.setKV('user', resData[0]);
-                $location.path( "/member" );
+				var user = resData[0];
+                dataService.setKV('user', user);
+				
+				if (user.type == "admin")
+					$location.path("/admin")
+				else if (user.type == "member")
+					$location.path("/member")
+				else
+					console.log("Unknown member type:",user.type)
             }
             else{
                 $scope.authRequest = "failure";

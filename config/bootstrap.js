@@ -19,6 +19,10 @@ module.exports.bootstrap = function(cb) {
 	];
     var persons = [
         {"name":'Amit', "email":'amitrke@gmail.com', "password":'abcd', 'type':"member"},
+		{"name":'Varun', "email":'varun@gmail.com', "password":'abcd', 'type':"member"},
+		{"name":'Abhishek', "email":'abhishek@gmail.com', "password":'abcd', 'type':"member"},
+		{"name":'Roy', "email":'roy@gmail.com', "password":'abcd', 'type':"member"},
+		{"name":'Tim', "email":'tim@gmail.com', "password":'abcd', 'type':"member"},
 		{"name":'Dennis', "email":'dennis@gmail.com', "password":'abcd', 'type':"admin"}
     ];
 	var courts = [
