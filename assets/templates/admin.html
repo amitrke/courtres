@@ -9,10 +9,7 @@
 	</div>
 	<div class="panel-body">
 	    <form ng-controller="FacilityHomeCtrl">
-	       <select id="allMembers" class="select2" multiple="multiple">
-    	      <option value="{{user.id}}" ng-repeat="user in allMembers">{{user.name}}</option>
-    	  </select>
-    	  
+            <input name="allMembers" id="allMembers" type="text" placeholder="All Members" ng-model="checkInSelected" typeahead="person.name for person in allMembers | filter:$viewValue | limitTo:8" class="form-control" typeahead-on-select='checkinOnSelect($item, $model, $label)'>
 	    </form>
 	</div>
 </div>
@@ -22,7 +19,9 @@
 	  <h3 class="panel-title">Courts</h3>
 	</div>
 	<div class="panel-body">
-	  Panel content
+        <ul ui-sortable="sortableOptions" ng-model="checkedInMembers">
+          <li ng-repeat="checkedInMember in checkedInMembers">{{ checkedInMember.name }}</li>
+        </ul>
 	</div>
 </div>
 

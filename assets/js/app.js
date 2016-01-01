@@ -3,7 +3,8 @@
 var courtresApp = angular.module('courtresApp', [
     'ngRoute',
     'ui.bootstrap',
-    'restangular'
+    'restangular',
+    'ui.sortable'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -32,6 +33,8 @@ courtresApp.config(['$routeProvider',
 
 courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     
+    $scope.checkedInMembers = [];
+    
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
@@ -50,6 +53,28 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
       $scope.allMembers = persons;
     });
     
+    $scope.checkinOnSelect = function ($item, $model, $label) {
+        $scope.$item = $item;
+        $scope.$model = $model;
+        $scope.$label = $label;
+        $scope.checkedInMembers.push($item);
+    };
+    
+    $scope.sortableOptions = {
+        update: function(e, ui) {
+          var logEntry = tmpList.map(function(i){
+            return i.value;
+          }).join(', ');
+          $scope.sortingLog.push('Update: ' + logEntry);
+        },
+        stop: function(e, ui) {
+          // this callback has the changed model
+          var logEntry = tmpList.map(function(i){
+            return i.value;
+          }).join(', ');
+          $scope.sortingLog.push('Stop: ' + logEntry);
+        }
+    };
 }]);
 
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){

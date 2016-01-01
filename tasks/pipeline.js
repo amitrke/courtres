@@ -33,6 +33,8 @@ var jsFilesToInject = [
     '/bower_components/restangular/dist/restangular.js',
     '/bower_components/select2/dist/js/select2.js',
     '/bower_components/lodash/lodash.js',
+    '/bower_components/angular-ui-sortable/sortable.js',
+    '/bower_components/jquery-ui/jquery-ui.js',
     
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
