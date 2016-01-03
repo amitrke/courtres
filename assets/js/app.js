@@ -4,7 +4,8 @@ var courtresApp = angular.module('courtresApp', [
     'ngRoute',
     'ui.bootstrap',
     'restangular',
-    'ui.sortable'
+    'ui.sortable',
+    'ui.layout'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -24,12 +25,41 @@ courtresApp.config(['$routeProvider',
     }).when('/admin', {
       templateUrl: '/templates/admin.html',
       controller: 'AdminCtrl'
+    }).when('/board', {
+      templateUrl: '/templates/board.html',
+      controller: 'BoardCtrl'
     }).
     otherwise({
       redirectTo: '/home',
       caseInsensitiveMatch: true
     })
   }]);
+
+courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
+    
+    var baseCourt = Restangular.all('courts');
+    
+    $scope.init = function(){
+        var facility = dataService.getKV('facility');
+        var user = dataService.getKV('user');
+        if (facility == null || user == null){
+            $location.path( "/" );
+        }
+        else{
+            $scope.facility = dataService.getKV('facility');
+            $scope.user = dataService.getKV('user');
+        }
+    };
+    
+    
+    
+    $scope.getCourtTimeSlots = function(id){
+        baseCourt.get(id).then(function(court){
+            return court.timeSlots;
+        });
+    };
+    
+}]);
 
 courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     
@@ -129,7 +159,14 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
         });
 
         if (dataService.getKV('user') != null && dataService.getKV('facility') != null){
-            $location.path( "/member" );
+            var user = dataService.getKV('user');
+            
+            if (user.type == "admin")
+                $location.path("/admin")
+            else if (user.type == "member")
+                $location.path("/member")
+            else
+                console.log("Unknown member type:",user.type)
         }
     }
     

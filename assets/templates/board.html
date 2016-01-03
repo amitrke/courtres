@@ -1,0 +1,31 @@
+<div ui-layout data-ng-init="init()">
+      <div ui-layout-container> 
+        <div ui-layout="{flow : 'column'}" >
+          <div ui-layout-container class=" html-back" size="20%">Queue</div>
+          <div ui-layout-container>
+            <div ui-layout>
+              <div ui-layout-container ng-repeat="court in facility.courts track by $index">
+                <div ui-layout>
+                  <div ui-layout-container size="20%">Court - {{court.name}}</div>
+                  <div ui-layout-container>
+                    <div ui-layout="{flow : 'column'}">
+                      
+                        <div ui-layout-container ng-repeat="timeslot in getCourtTimeSlots(court.id) track by $index">
+                            <div ui-layout>
+                              <div ui-layout-container size="20%">00</div>
+                              <div ui-layout-container>
+                                Amit, Tim, Varun, Roy
+                              </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

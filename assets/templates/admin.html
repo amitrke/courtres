@@ -19,6 +19,7 @@
 	  <h3 class="panel-title">Courts</h3>
 	</div>
 	<div class="panel-body">
+        
         <ul ui-sortable="sortableOptions" ng-model="checkedInMembers">
           <li ng-repeat="checkedInMember in checkedInMembers">{{ checkedInMember.name }}</li>
         </ul>
@@ -33,3 +34,5 @@
 	  Panel content
 	</div>
 </div>
+
+<a href="#/board" class="list-group-item active">Board</a>

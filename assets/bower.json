@@ -25,6 +25,7 @@
     "bootstrap": "~3.3.5",
     "restangular": "~1.5.1",
     "angular-ui-sortable": "~0.13.4",
-    "jquery-ui": "~1.11.4"
+    "jquery-ui": "~1.11.4",
+    "angular-ui-layout": "~1.4.1"
   }
 }
