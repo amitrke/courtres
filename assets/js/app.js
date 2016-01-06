@@ -48,11 +48,28 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
+			$scope.courts = [];
+			setTimeslotDetails($scope.facility);
         }
     };
     
+	//Facility has court details but what I need here is two level deep data for the timeslots also, Sails is providing me only one level of data at this point, hence this looping.
+    var setTimeslotDetails = function(facility){
+		for (var i=0; i<facility.courts.length; i++){
+			baseCourt.get(facility.courts[i].id).then(function(court){
+				$scope.courts.push(court);
+				validateAllResponses();
+			});
+		}
+	};
     
-    
+	//We are making a-sync calls to get the court details, this is to ensure that we got all the court details before we start paining the UI. TODO: there should be a better way to do this.
+	var validateAllResponses = function(){
+		if ($scope.courts.length >= $scope.facility.courts.length){
+			$scope.allCourts = $scope.courts;
+		}
+	}
+	
     $scope.getCourtTimeSlots = function(id){
         baseCourt.get(id).then(function(court){
             return court.timeSlots;
