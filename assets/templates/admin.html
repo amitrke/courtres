@@ -16,12 +16,11 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-	  <h3 class="panel-title">Courts</h3>
+	  <h3 class="panel-title">Checkedin members</h3>
 	</div>
 	<div class="panel-body">
-        
-        <ul ui-sortable="sortableOptions" ng-model="checkedInMembers">
-          <li ng-repeat="checkedInMember in checkedInMembers">{{ checkedInMember.name }}</li>
+        <ul ui-sortable="sortableOptions" ng-model="facility.checkedInMembers">
+          <li ng-repeat="checkedInMember in facility.checkedInMembers">{{ checkedInMember.name }}</li>
         </ul>
 	</div>
 </div>

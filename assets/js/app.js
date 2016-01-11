@@ -83,9 +83,8 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 }]);
 
 courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
-    
-    $scope.checkedInMembers = [];
-    
+    var baseFacility = Restangular.all('facility');
+	
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
@@ -95,15 +94,42 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
+			
+			//Listen to model change events.
+			io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
+			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
     };
     
+	$scope.onFacilityChange = function(event){
+		/*
+		TODO: 1. If using a local array, then unique items should be maintained.
+			  2. Handle the situation of removing the checkedInMembers.
+		*/
+		if (event.verb == 'addedTo' && event.attribute == "checkedInMembers" && event.id == $scope.facility.id){
+			baseFacility.get($scope.facility.id).then(function (facility){
+				$scope.facility = facility;
+			});
+		}
+		else if (event.verb == 'updated' && event.data.id == $scope.facility.id){
+			$scope.facility = event.data;
+		}
+	};
+	
     var basePerson = Restangular.all('person');
     
     basePerson.getList().then(function(persons) {
       $scope.allMembers = persons;
     });
     
+	var getCachedPerson = function(id){
+		for (var i=0; i<$scope.allMembers.length; i++){
+			if ($scope.allMembers[i].id == id){
+				return $scope.allMembers[i];
+			}
+		}
+	}
+	
     $scope.checkinOnSelect = function ($item, $model, $label) {
         $scope.$item = $item;
         $scope.$model = $model;
