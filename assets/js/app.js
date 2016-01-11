@@ -108,11 +108,8 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         $scope.$item = $item;
         $scope.$model = $model;
         $scope.$label = $label;
-        $scope.checkedInMembers.push($item);
-		
-		var baseCheckedin = Restangular.all('checkedin');
-		var newCheckin = {'personid':$item.id, 'facilityid':$scope.facility.id};
-		baseCheckedin.post(newCheckin);
+		$item.checkedInToFacility = $scope.facility;
+		$item.save();
     };
     
     $scope.sortableOptions = {

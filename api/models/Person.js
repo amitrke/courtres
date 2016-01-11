@@ -21,6 +21,16 @@ module.exports = {
 	  facilities:{
           collection:'facility',
           via:'members'
+	  },
+	  
+	  checkedInToFacility:{
+		  model:'facility',
+		  via:'checkedInMembers'
+	  },
+	  
+	  reservation:{
+		  model:'timeslots',
+		  via:'reservation'
 	  }
   }
 };

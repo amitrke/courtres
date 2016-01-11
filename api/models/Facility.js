@@ -19,7 +19,11 @@ module.exports = {
       courts:{
         collection:'courts',
         via:'facility'
-      }
+      },
       
+	  checkedInMembers:{
+		  collection:'person',
+		  via:'checkedInToFacility'
+	  }
   }
 };

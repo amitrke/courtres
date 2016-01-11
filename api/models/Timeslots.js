@@ -8,7 +8,11 @@
 module.exports = {
 
   attributes: {
-      startMin:'INTEGER'
+      startMin:'INTEGER',
+	  reservation:{
+		  collection:'person',
+		  via:'reservation'
+	  }
   }
 };
 
