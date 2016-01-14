@@ -8,12 +8,8 @@
 					Wait time: 10 Mins.
 				</div>
 				<div ui-layout-container id="queue">
-					<ul>
-						<li>Amit</li>
-						<li>Rohit</li>
-						<li>Tim</li>
-						<li>Mohit</li>
-						<li>Jim</li>
+					<ul ui-sortable="sortableOptions" ng-model="facility.checkedInMembers" class="dragdrop-container">
+					  <li ng-repeat="checkedInMember in facility.checkedInMembers" class="dragdrop-element">{{ checkedInMember.name }}</li>
 					</ul>
 				</div>
 			</div>
@@ -30,10 +26,14 @@
                             <div ui-layout>
                               <div ui-layout-container size="20%">{{timeslot.startMin}}</div>
                               <div ui-layout-container id="c_{{court.name}}_t_{{timeslot.startMin}}">
+							  
+								<ul ui-sortable="sortableOptions" ng-model="timeslot.reservation" class="dragdrop-container">
+								  <li ng-repeat="resPerson in timeslot.reservation" class="dragdrop-element">{{ resPerson.name }}</li>
+								</ul>
+								
                               </div>
                             </div>
                         </div>
-                        
                         
                     </div>
                   </div>

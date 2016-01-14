@@ -38,7 +38,8 @@ courtresApp.config(['$routeProvider',
 courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     
     var baseCourt = Restangular.all('courts');
-    
+    var baseFacility = Restangular.all('facility');
+	
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
@@ -50,9 +51,18 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             $scope.user = dataService.getKV('user');
 			$scope.courts = [];
 			setTimeslotDetails($scope.facility);
+			
+			//Listen to model change events.
+			io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
+			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
     };
     
+	$scope.sortableOptions = {
+		placeholder: ".dragdrop-element",
+		connectWith: ".dragdrop-container"
+	};
+	
 	/*Facility has court details but what I need here is two level deep data for the 
 	timeslots also, Sails is providing me only one level of data at this point, 
 	hence this looping.*/
@@ -79,6 +89,18 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             return court.timeSlots;
         });
     };
+	
+	$scope.onFacilityChange = function(event){
+		/*
+		TODO: 1. If using a local array, then unique items should be maintained.
+			  2. Handle the situation of removing the checkedInMembers.
+		*/
+		if (event.verb == 'addedTo' && event.attribute == "checkedInMembers" && event.id == $scope.facility.id){
+			baseFacility.get($scope.facility.id).then(function (facility){
+				$scope.facility = facility;
+			});
+		}
+	};
     
 }]);
 
