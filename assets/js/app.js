@@ -2,10 +2,8 @@
 
 var courtresApp = angular.module('courtresApp', [
     'ngRoute',
-    'ui.bootstrap',
     'restangular',
-    'ui.sortable',
-    'ui.layout'
+	'ngMaterial'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -122,7 +120,37 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
     };
-    
+	
+	$scope.querySearch = function(query) {
+      var results = query ? $scope.allMembers.filter( $scope.createFilterFor(query) ) : $scope.allMembers,
+          deferred;
+      if (self.simulateQuery) {
+        deferred = $q.defer();
+        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        return deferred.promise;
+      } else {
+        return results;
+      }
+    }
+	
+    $scope.searchTextChange = function(text) {
+      console.log('Text changed to ' + text);
+    }
+	
+    $scope.selectedItemChange = function(item) {
+		item.checkedInToFacility = $scope.facility;
+		item.save();
+		console.log('Item changed to ' + JSON.stringify(item));
+    }
+	
+	$scope.createFilterFor = function(query) {
+      var lowercaseQuery = angular.lowercase(query);
+      return function filterFn(person) {
+		var localcasename = angular.lowercase(person.name);
+		return (localcasename.indexOf(lowercaseQuery) === 0);
+      };
+    }
+	
 	$scope.onFacilityChange = function(event){
 		/*
 		TODO: 1. If using a local array, then unique items should be maintained.
@@ -151,30 +179,7 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			}
 		}
 	}
-	
-    $scope.checkinOnSelect = function ($item, $model, $label) {
-        $scope.$item = $item;
-        $scope.$model = $model;
-        $scope.$label = $label;
-		$item.checkedInToFacility = $scope.facility;
-		$item.save();
-    };
-    
-    $scope.sortableOptions = {
-        update: function(e, ui) {
-          var logEntry = tmpList.map(function(i){
-            return i.value;
-          }).join(', ');
-          $scope.sortingLog.push('Update: ' + logEntry);
-        },
-        stop: function(e, ui) {
-          // this callback has the changed model
-          var logEntry = tmpList.map(function(i){
-            return i.value;
-          }).join(', ');
-          $scope.sortingLog.push('Stop: ' + logEntry);
-        }
-    };
+   
 }]);
 
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
@@ -240,6 +245,8 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
         }
     }
     
+	$scope.person = {'email':"dennis@gmail.com",'password':"abcd"};
+	
     $scope.login = function(person){
         io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
             if (resData != null && resData.length > 0){

@@ -16,8 +16,7 @@ var tmpPath = '.tmp/public/';
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-    '/bower_components/bootstrap/dist/css/bootstrap.css',
-    '/bower_components/angular-ui-layout/src/ui-layout.css',
+    '/bower_components/angular-material/angular-material.css',
   'styles/**/*.css'
 ];
 
@@ -28,15 +27,12 @@ var jsFilesToInject = [
     '/bower_components/jquery/dist/jquery.js',
   '/bower_components/angular/angular.js',
   '/bower_components/angular-route/angular-route.js',
-  '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-  '/bower_components/bootstrap/dist/js/boostrap.js',
     '/bower_components/restangular/dist/restangular.js',
-    '/bower_components/select2/dist/js/select2.js',
     '/bower_components/lodash/lodash.js',
-    '/bower_components/angular-ui-sortable/sortable.js',
-    '/bower_components/jquery-ui/jquery-ui.js',
-    '/bower_components/angular-ui-layout/src/ui-layout.js',
-    
+	'/bower_components/angular-material/angular-material.js',
+	'/bower_components/angular-aria/angular-aria.js',
+	'/bower_components/angular-animate/angular-animate.js',
+    '/bower_components/underscore/underscore.js',
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 

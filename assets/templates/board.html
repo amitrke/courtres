@@ -1,46 +1,18 @@
-<div ui-layout data-ng-init="init()">
-      <div ui-layout-container> 
-        <div ui-layout="{flow : 'column'}" >
-          <div ui-layout-container size="20%">
-			<div ui-layout="{flow : 'row'}">
-				<div ui-layout-container size="10%">
-					{{facility.name}}<br>
-					Wait time: 10 Mins.
-				</div>
-				<div ui-layout-container id="queue">
-					<ul ui-sortable="sortableOptions" ng-model="facility.checkedInMembers" class="dragdrop-container">
-					  <li ng-repeat="checkedInMember in facility.checkedInMembers" class="dragdrop-element">{{ checkedInMember.name }}</li>
-					</ul>
-				</div>
-			</div>
-		  </div>
-          <div ui-layout-container>
-            <div ui-layout>
-              <div ui-layout-container ng-repeat="court in allCourts track by $index | orderBy:'name'">
-                <div ui-layout>
-                  <div ui-layout-container size="20%">Court - {{court.name}}</div>
-                  <div ui-layout-container>
-                    <div ui-layout="{flow : 'column'}">
-                      
-                        <div ui-layout-container ng-repeat="timeslot in court.timeSlots track by $index">
-                            <div ui-layout>
-                              <div ui-layout-container size="20%">{{timeslot.startMin}}</div>
-                              <div ui-layout-container id="c_{{court.name}}_t_{{timeslot.startMin}}">
-							  
-								<ul ui-sortable="sortableOptions" ng-model="timeslot.reservation" class="dragdrop-container">
-								  <li ng-repeat="resPerson in timeslot.reservation" class="dragdrop-element">{{ resPerson.name }}</li>
-								</ul>
-								
-                              </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<div flex layout="row" data-ng-init="init()">
+  <div flex="20" layout="column" class="boxWithHeight" layout-padding>
+    <section flex="10">BadmintonNC Tag Board</section>
+    <section flex>
+        Queue
+		<ul>
+		  <li ng-repeat="checkedInMember in facility.checkedInMembers" >{{ checkedInMember.name }}</li>
+		</ul>
+    </section>
+  </div>
+  <div flex layout="column" class="boxWithHeight" layout-padding>
+    <div flex layout="row" ng-repeat="court in allCourts track by $index | orderBy:'name'">
+        <section flex ng-repeat="timeslot in court.timeSlots track by $index">
+			Court {{court.name}} - Timeslot {{timeslot.startMin}}
+        </section>
     </div>
+  </div>
+</div>
