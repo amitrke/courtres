@@ -3,7 +3,8 @@
 var courtresApp = angular.module('courtresApp', [
     'ngRoute',
     'restangular',
-	'ngMaterial'
+	'ngMaterial',
+    'dndLists'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -37,12 +38,36 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     
     var baseCourt = Restangular.all('courts');
     var baseFacility = Restangular.all('facility');
-	
+	var baseTimeslot = Restangular.all('timeslots');
+    
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
         if (facility == null || user == null){
-            $location.path( "/" );
+            //Stub the data.
+            io.socket.get('/person?where={"email":{"equals":"dennis@gmail.com"}}', function (resData) {
+                if (resData.length > 0){
+                    dataService.setKV('user',resData[0]);
+                    $scope.user = resData[0];
+                    io.socket.get('/facility?where={"name":{"equals":"BadmintonNC"}}', function (resData) {
+                        if (resData.length > 0){
+                            dataService.setKV('facility',resData[0]);
+                            $scope.facility = resData[0];
+                            
+                            $scope.courts = [];
+                            setTimeslotDetails($scope.facility);
+			
+                            //Listen to model change events.
+                            io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
+                            io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
+                            //$location.path( "/" );
+                        }
+                    });
+                }
+            });
+            
+            
+            
         }
         else{
             $scope.facility = dataService.getKV('facility');
@@ -67,7 +92,10 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     var setTimeslotDetails = function(facility){
 		for (var i=0; i<facility.courts.length; i++){
 			baseCourt.get(facility.courts[i].id).then(function(court){
-				$scope.courts.push(court);
+                for(var j=0; j<court.timeSlots.length; j++){
+                    court.timeSlots[j].reservation = [];
+                }
+                $scope.courts.push(court);
 				validateAllResponses();
 			});
 		}

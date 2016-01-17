@@ -1,10 +1,18 @@
-<div flex layout="row" data-ng-init="init()">
+<div flex layout="row" data-ng-init="init()" style="height:100%" class="simpleDemo">
   <div flex="20" layout="column" class="boxWithHeight" layout-padding>
     <section flex="10">BadmintonNC Tag Board</section>
     <section flex>
         Queue
-		<ul>
-		  <li ng-repeat="checkedInMember in facility.checkedInMembers" >{{ checkedInMember.name }}</li>
+		<ul dnd-list="facility.checkedInMembers">
+		  <li ng-repeat="checkedInMember in facility.checkedInMembers" 
+                dnd-draggable="checkedInMember"
+                dnd-moved="facility.checkedInMembers.splice($index, 1)"
+                dnd-effect-allowed="move"
+                dnd-selected="models.selected = checkedInMember"
+                ng-class="{'selected': models.selected === checkedInMember}"
+              >
+              {{ checkedInMember.name }}
+            </li>
 		</ul>
     </section>
   </div>
@@ -12,6 +20,17 @@
     <div flex layout="row" ng-repeat="court in allCourts track by $index | orderBy:'name'">
         <section flex ng-repeat="timeslot in court.timeSlots track by $index">
 			Court {{court.name}} - Timeslot {{timeslot.startMin}}
+            <ul dnd-list="timeslot.reservation">
+                <li ng-repeat="reservation in timeslot.reservation" 
+                dnd-draggable="reservation"
+                dnd-moved="timeslot.reservation.splice($index, 1)"
+                dnd-effect-allowed="move"
+                dnd-selected="models.selected = reservation"
+                ng-class="{'selected': models.selected === reservation}"
+              >
+              {{ reservation.name }}
+            </li>
+            </ul>
         </section>
     </div>
   </div>
