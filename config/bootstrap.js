@@ -13,9 +13,13 @@ module.exports.bootstrap = function(cb) {
     
     var facilities = [{"name":'BadmintonNC', "noOfCourts":7}];
 	var timeslots = [
-		{'startMin':0}, 
-		{'startMin':20}, 
-		{'startMin':40}
+		{'startMin':0}, {'startMin':20}, {'startMin':40},
+        {'startMin':0}, {'startMin':20}, {'startMin':40},
+        {'startMin':0}, {'startMin':20}, {'startMin':40},
+        {'startMin':0}, {'startMin':20}, {'startMin':40},
+        {'startMin':0}, {'startMin':20}, {'startMin':40},
+        {'startMin':0}, {'startMin':20}, {'startMin':40},
+        {'startMin':0}, {'startMin':20}, {'startMin':40}
 	];
     var persons = [
         {"name":'Amit', "email":'amitrke@gmail.com', "password":'abcd', 'type':"member"},
@@ -40,11 +44,23 @@ module.exports.bootstrap = function(cb) {
 	
 	var afterTimeslotsCreation = function(err, newTimeslots){
 		sails.log.info("Associating timeslot records..");
+        for (var i=0; i<objCourts.length; i++){
+            var thisCourt = objCourts[i];
+            var init = i*3;
+            var term = init+3;
+            for (var j=init; j<term; j++){
+                newTimeslots[j].court = thisCourt;
+                newTimeslots[j].save();
+                thisCourt.timeSlots.add(newTimeslots[j]);
+            }
+        }
+        thisCourt.save();
+        /*
 		while (objCourts.length){
 			var thisCourt = objCourts.pop();
 			thisCourt.timeSlots.add(newTimeslots);
 			thisCourt.save();
-		}
+		}*/
 		cb();
 	};
 	

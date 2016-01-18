@@ -12,7 +12,11 @@ module.exports = {
 	  reservation:{
 		  collection:'person',
 		  via:'reservation'
-	  }
+	  },
+      court:{
+          model:'courts',
+          via:'timeSlots'
+      }
   }
 };
 

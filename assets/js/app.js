@@ -54,8 +54,16 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                             dataService.setKV('facility',resData[0]);
                             $scope.facility = resData[0];
                             
+                            baseTimeslot.getList().then(function(timeslots){
+                                $scope.allTimeslots = timeslots;
+                            });
+                            
+                            baseCourt.getList().then(function(courts){
+                                $scope.allCourts = courts;
+                            });
+                            
                             $scope.courts = [];
-                            setTimeslotDetails($scope.facility);
+                            //setTimeslotDetails($scope.facility);
 			
                             //Listen to model change events.
                             io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
@@ -78,6 +86,12 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			//Listen to model change events.
 			io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
 			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
+        }
+    };
+    
+    $scope.filterTimeSlots = function(court){
+        return function(timeslot) {
+            return timeslot.court.id == court.id;
         }
     };
     
