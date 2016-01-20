@@ -3,7 +3,8 @@
     <section flex="10">BadmintonNC Tag Board</section>
     <section flex>
         Queue
-		<ul dnd-list="facility.checkedInMembers">
+		<ul dnd-list="facility.checkedInMembers"
+            dnd-drop="timeslotDrop(event, index, item, external, type, 'itemType')">
 		  <li ng-repeat="checkedInMember in facility.checkedInMembers" 
                 dnd-draggable="checkedInMember"
                 dnd-moved="facility.checkedInMembers.splice($index, 1)"
@@ -20,7 +21,8 @@
     <div flex layout="row" ng-repeat="court in allCourts track by $index | orderBy:'name'">
         <section flex ng-repeat="timeslot in allTimeslots | filter:filterTimeSlots(court)">
 			Court {{court.name}} - Timeslot {{timeslot.startMin}} [ID:{{timeslot.id}}]
-            <ul dnd-list="timeslot.reservation">
+            <ul dnd-list="timeslot.reservation"
+                dnd-drop="timeslotDrop(event, index, item, external, type, timeslot)">
                 <li ng-repeat="reservation in timeslot.reservation" 
                 dnd-draggable="reservation"
                 dnd-moved="timeslot.reservation.splice($index, 1)"

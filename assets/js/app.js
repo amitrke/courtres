@@ -39,6 +39,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     var baseCourt = Restangular.all('courts');
     var baseFacility = Restangular.all('facility');
 	var baseTimeslot = Restangular.all('timeslots');
+    var basePerson = Restangular.all('person');
     
     $scope.init = function(){
         var facility = dataService.getKV('facility');
@@ -93,6 +94,15 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         return function(timeslot) {
             return timeslot.court.id == court.id;
         }
+    };
+    
+    
+    $scope.timeslotDrop = function(event, index, item, external, type, timeslot){
+        basePerson.get(item.id).then(function(person){
+            person.reservation = timeslot;
+            person.save();
+        });
+       
     };
     
 	$scope.sortableOptions = {
