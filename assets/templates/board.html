@@ -5,9 +5,9 @@
         Queue
 		<ul dnd-list="facility.checkedInMembers"
             dnd-drop="timeslotDrop(event, index, item, external, type, 'itemType')">
-		  <li ng-repeat="checkedInMember in facility.checkedInMembers" 
+		  <li ng-repeat="checkedInMember in checkedInMembers | filter:filterCheckedinMembers()" 
                 dnd-draggable="checkedInMember"
-                dnd-moved="facility.checkedInMembers.splice($index, 1)"
+                dnd-moved="checkedInMembers.splice($index, 1)"
                 dnd-effect-allowed="move"
                 dnd-selected="models.selected = checkedInMember"
                 ng-class="{'selected': models.selected === checkedInMember}"
@@ -24,12 +24,12 @@
             <ul dnd-list="timeslot.reservation"
                 dnd-drop="timeslotDrop(event, index, item, external, type, timeslot)">
                 <li ng-repeat="reservation in timeslot.reservation" 
-                dnd-draggable="reservation"
-                dnd-moved="timeslot.reservation.splice($index, 1)"
-                dnd-effect-allowed="move"
-                dnd-selected="models.selected = reservation"
-                ng-class="{'selected': models.selected === reservation}"
-              >
+                    dnd-draggable="reservation"
+                    dnd-moved="timeslot.reservation.splice($index, 1)"
+                    dnd-effect-allowed="move"
+                    dnd-selected="models.selected = reservation"
+                    ng-class="{'selected': models.selected === reservation}"
+                >
               {{ reservation.name }}
             </li>
             </ul>
