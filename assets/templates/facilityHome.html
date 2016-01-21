@@ -1,0 +1,18 @@
+<div data-ng-init="init()">
+    Welcome to {{facility.name}}
+    <p></p>
+</div>
+<form ng-controller="FacilityHomeCtrl">
+    <div class="alert alert-danger" role="alert" ng-if="authRequest == 'failure'">
+        <strong>Oh snap!</strong> Login success
+      </div>
+    <div class="alert alert-success" role="alert" ng-if="authRequest == 'success'">
+        <strong>Login success</strong>
+      </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">@</span>
+      <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1" ng-model="person.email">
+    </div>
+    <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" ng-model="person.password">
+    <button type="button" class="btn btn-default" ng-click="login(person)">Go!</button>
+</form>
