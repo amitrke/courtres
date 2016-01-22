@@ -85,5 +85,5 @@ module.exports = {
     host: process.env.OPENSHIFT_NODEJS_IP||'127.0.0.1',
     explicitHost: process.env.OPENSHIFT_APP_DNS || "localhost",
     
-    hookTimeout: 30000
+    hookTimeout: 100000
 };
