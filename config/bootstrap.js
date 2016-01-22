@@ -10,7 +10,8 @@
  */
 
 module.exports.bootstrap = function(cb) {
-    
+    cb();
+    /*
     var facilities = [{"name":'BadmintonNC', "noOfCourts":7}];
 	var timeslots = [
 		{'startMin':0}, {'startMin':20}, {'startMin':40},
@@ -55,12 +56,7 @@ module.exports.bootstrap = function(cb) {
             }
         }
         thisCourt.save();
-        /*
-		while (objCourts.length){
-			var thisCourt = objCourts.pop();
-			thisCourt.timeSlots.add(newTimeslots);
-			thisCourt.save();
-		}*/
+        
 		cb();
 	};
 	
@@ -128,5 +124,5 @@ module.exports.bootstrap = function(cb) {
 			thisPerson.save();
 		}
 		afterPersonAssoc();
-	};
+	};*/
 };
