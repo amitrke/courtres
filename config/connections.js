@@ -63,7 +63,7 @@ module.exports.connections = {
     port: process.env.OPENSHIFT_MONGODB_DB_PORT,
     user: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
     password: process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
-    database: 'courtres'
+    database: process.env.OPENSHIFT_APP_NAME
   },
 
   /***************************************************************************
