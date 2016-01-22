@@ -10,8 +10,7 @@
  */
 
 module.exports.bootstrap = function(cb) {
-    cb();
-    /*
+    
     var facilities = [{"name":'BadmintonNC', "noOfCourts":7}];
 	var timeslots = [
 		{'startMin':0}, {'startMin':20}, {'startMin':40},
@@ -124,5 +123,5 @@ module.exports.bootstrap = function(cb) {
 			thisPerson.save();
 		}
 		afterPersonAssoc();
-	};*/
+	};
 };
