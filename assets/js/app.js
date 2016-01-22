@@ -63,7 +63,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                                 $scope.allCourts = courts;
                             });
                             
-                            io.socket.get('/person?where={"checkedInToFacility":{"notNull"}}', function (resData) {
+                            io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
                                 $scope.checkedInMembers = resData;
                             });
                             
