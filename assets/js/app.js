@@ -46,11 +46,11 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         var user = dataService.getKV('user');
         if (facility == null || user == null){
             //Stub the data.
-            io.socket.get('/person?where={"email":{"equals":"dennis@gmail.com"}}', function (resData) {
+            io.socket.get('/person?where={"email":"dennis@gmail.com"}', function (resData) {
                 if (resData.length > 0){
                     dataService.setKV('user',resData[0]);
                     $scope.user = resData[0];
-                    io.socket.get('/facility?where={"name":{"equals":"BadmintonNC"}}', function (resData) {
+                    io.socket.get('/facility?where={"name":"BadmintonNC"}', function (resData) {
                         if (resData.length > 0){
                             dataService.setKV('facility',resData[0]);
                             $scope.facility = resData[0];
@@ -296,7 +296,7 @@ courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangul
 	$scope.person = {'email':"dennis@gmail.com",'password':"abcd"};
 	
     $scope.login = function(person){
-        io.socket.get('/person?where={"email":{"equals":"'+person.email+'"},"password":{"equals":"'+person.password+'"}}', function (resData) {
+        io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
             if (resData != null && resData.length > 0){
                 $scope.authRequest = "success";
 				var user = resData[0];
