@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
 	grunt.registerTask('prod', [
-		'compileAssets', 'linkAssets',  'watch'
+		'compileAssets', 'linkAssets'
 	]);
 };
