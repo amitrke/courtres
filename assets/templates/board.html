@@ -3,9 +3,9 @@
     <section flex="10">BadmintonNC Tag Board</section>
     <section flex>
         Queue
-		<ul dnd-list="facility.checkedInMembers"
-            dnd-drop="timeslotDrop(event, index, item, external, type, 'itemType')">
-		  <li ng-repeat="checkedInMember in checkedInMembers | filter:filterCheckedinMembers()" 
+		<ul dnd-list="checkedInMembers"
+            dnd-drop="queueDrop(event, index, item, external, type)">
+		  <li ng-repeat="checkedInMember in checkedInMembers" 
                 dnd-draggable="checkedInMember"
                 dnd-moved="checkedInMembers.splice($index, 1)"
                 dnd-effect-allowed="move"

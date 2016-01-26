@@ -63,9 +63,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                                 $scope.allCourts = courts;
                             });
                             
-                            io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
-                                $scope.checkedInMembers = resData;
-                            });
+                            $scope.updateQueue();
                             
                             $scope.courts = [];
                             //setTimeslotDetails($scope.facility);
@@ -78,30 +76,28 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                     });
                 }
             });
-            
-            
-            
         }
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
 			$scope.courts = [];
             
-			baseTimeslot.getList().then(function(timeslots){
+			 baseTimeslot.getList().then(function(timeslots){
                 $scope.allTimeslots = timeslots;
             });
 
             baseCourt.getList().then(function(courts){
                 $scope.allCourts = courts;
             });
-			
-            io.socket.get('/person?where={"checkedInToFacility":{"notNull"}}', function (resData) {
-                $scope.checkedInMembers = resData;
-            });
-            
-			//Listen to model change events.
-			io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
-			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
+
+            $scope.updateQueue();
+
+            $scope.courts = [];
+            //setTimeslotDetails($scope.facility);
+
+            //Listen to model change events.
+            io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
+            io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
     };
     
@@ -111,10 +107,10 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         }
     };
     
-    $scope.filterCheckedinMembers = function(){
-        return function(checkedInMember) {
-            return checkedInMember.reservation == null;
-        }
+    $scope.updateQueue = function(){
+        io.socket.get('/person?where={"checkedInToFacility":{"!":null},"reservation":null}', function (resData) {
+            $scope.checkedInMembers = resData;
+        });
     };
     
     $scope.timeslotDrop = function(event, index, item, external, type, timeslot){
@@ -125,10 +121,13 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
        return item;
     };
     
-	$scope.sortableOptions = {
-		placeholder: ".dragdrop-element",
-		connectWith: ".dragdrop-container"
-	};
+    $scope.queueDrop = function(event, index, item, external, type){
+        basePerson.get(item.id).then(function(person){
+            person.reservation = null;
+            person.save();
+        });
+       return item;
+    };
 	
     $scope.getCourtTimeSlots = function(id){
         baseCourt.get(id).then(function(court){
@@ -147,6 +146,10 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			});
 		}
 	};
+    
+    $scope.queueMove = function(event, index, item){
+        $scope.checkedInMembers.splice(index, 1);
+    };
     
 }]);
 
