@@ -18,7 +18,7 @@
     </section>
   </div>
   <div flex layout="column" class="boxWithHeight" layout-padding>
-    <div flex layout="row" ng-repeat="court in allCourts track by $index | orderBy:'name'">
+    <div flex layout="row" ng-repeat="court in allCourts | orderBy:'name'">
         <section flex ng-repeat="timeslot in allTimeslots | filter:filterTimeSlots(court)">
 			Court {{court.name}} - Timeslot {{timeslot.startMin}} [ID:{{timeslot.id}}]
             <ul dnd-list="timeslot.reservation"
