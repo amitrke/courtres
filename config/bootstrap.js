@@ -13,13 +13,13 @@ module.exports.bootstrap = function(cb) {
     
     var facilities = [{"name":'BadmintonNC', "noOfCourts":7}];
 	var timeslots = [
-		{'startMin':0}, {'startMin':20}, {'startMin':40},
-        {'startMin':0}, {'startMin':20}, {'startMin':40},
-        {'startMin':0}, {'startMin':20}, {'startMin':40},
-        {'startMin':0}, {'startMin':20}, {'startMin':40},
-        {'startMin':0}, {'startMin':20}, {'startMin':40},
-        {'startMin':0}, {'startMin':20}, {'startMin':40},
-        {'startMin':0}, {'startMin':20}, {'startMin':40}
+		{'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
+        {'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
+        {'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
+        {'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
+        {'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
+        {'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
+        {'startMin':0, 'duration':20}, {'startMin':20, 'duration':20}, {'startMin':40, 'duration':20},
 	];
     var persons = [
         {"name":'Amit', "email":'amitrke@gmail.com', "password":'abcd', 'type':"member"},

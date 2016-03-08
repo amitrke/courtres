@@ -34,7 +34,8 @@ courtresApp.config(['$routeProvider',
     })
   }]);
 
-courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
+courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$interval',
+                                     function($scope, $routeParams, Restangular, dataService, $location, $interval){
     
     var baseCourt = Restangular.all('courts');
     var baseFacility = Restangular.all('facility');
@@ -99,6 +100,25 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
             io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
+    };
+    
+    $interval(function(){
+    	//Get Minutes
+    	var date = new Date();
+    	var minutes = date.getMinutes();
+    	$scope.updateTimeSlotsForCurrentTime(minutes);
+    	
+    }, 10000);
+    
+    $scope.updateTimeSlotsForCurrentTime = function(currMinutes){
+    	_.each($scope.allTimeslots, function(timeslot) {
+    		  if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin+timeslot.duration){
+    			  timeslot.current = true;
+    		  }
+    		  else{
+    			  timeslot.current = false;
+    		  }
+    	});
     };
     
     $scope.filterTimeSlots = function(court){
