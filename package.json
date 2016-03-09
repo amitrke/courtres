@@ -32,8 +32,7 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js",
-    "postinstall": "export HOME=$HOME/app-root/runtime/repo; cd $HOME/assets; ../node_modules/bower/bin/bower install" 
+    "start": "node app.js"
   },
   "main": "app.js",
   "repository": {
