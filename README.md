@@ -1,8 +1,8 @@
-![Build Status](https://travis-ci.org/amitrke/courtres.svg?branch=master)
+[![Build Status](https://travis-ci.org/amitrke/courtres.svg?branch=master)](https://travis-ci.org/amitrke/courtres)
 
 # Court Reservation Application.
 
-This project is work-in-progress, the first version should be completed by 15th Jan 2016.
+This project is work-in-progress
 The application can be used by a sports facility to reserve courts for its members, some of the features include..
 * Member signup
 * Facility to checkin members as they come to play
