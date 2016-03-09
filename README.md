@@ -1,3 +1,5 @@
+![Build Status](https://travis-ci.org/amitrke/courtres.svg?branch=master)
+
 # Court Reservation Application.
 
 This project is work-in-progress, the first version should be completed by 15th Jan 2016.
