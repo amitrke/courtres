@@ -42,6 +42,8 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 	var baseTimeslot = Restangular.all('timeslots');
     var basePerson = Restangular.all('person');
     
+    $scope.queueMembers = [];
+                                         
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
@@ -112,15 +114,28 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     
     $scope.updateTimeSlotsForCurrentTime = function(currMinutes){
     	_.each($scope.allTimeslots, function(timeslot) {
-    		  if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin+timeslot.duration){
+    		  if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin+timeslot.duration){ //Current time Slot
     			  timeslot.current = true;
+                  $scope.updateMembersInCurrentTimeSlot(timeslot);
     		  }
-    		  else{
+    		  else { 
     			  timeslot.current = false;
     		  }
     	});
     };
     
+    $scope.updateMembersInCurrentTimeSlot = function(timeslot){
+        _.each(timeslot.reservation, function(member){
+            if (member.status != "Playing"){
+                basePerson.get(member.id).then(function(person){
+                    person.status = "Playing";
+                    person.save();
+                });
+                member.status = "Playing";
+            }
+        });
+    };
+        
     $scope.filterTimeSlots = function(court){
         return function(timeslot) {
             return timeslot.court.id == court.id;
@@ -128,8 +143,19 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     };
     
     $scope.updateQueue = function(){
-        io.socket.get('/person?where={"checkedInToFacility":{"!":null},"reservation":null}', function (resData) {
-            $scope.checkedInMembers = resData;
+        //TODO: Add facility ID to query.
+        io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
+            _.each(resData, function(checkedInMember){
+                var exists = _.find($scope.queueMembers, function(qm){
+                    if (qm.id == checkedInMember.id || checkedInMember.reservation != null)
+                        return true;
+                    else
+                        return false;
+                });
+                if (!exists){
+                    $scope.queueMembers.push(checkedInMember);
+                }
+            });
         });
     };
     
@@ -168,7 +194,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 	};
     
     $scope.queueMove = function(event, index, item){
-        $scope.checkedInMembers.splice(index, 1);
+        $scope.queueMembers.splice(index, 1);
     };
     
 }]);

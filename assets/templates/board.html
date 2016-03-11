@@ -3,11 +3,11 @@
     <section flex="10">BadmintonNC Tag Board</section>
     <section flex>
         Queue
-		<ul dnd-list="checkedInMembers"
+		<ul dnd-list="queueMembers"
             dnd-drop="queueDrop(event, index, item, external, type)">
-		  <li ng-repeat="checkedInMember in checkedInMembers" 
+		  <li ng-repeat="checkedInMember in queueMembers" 
                 dnd-draggable="checkedInMember"
-                dnd-moved="checkedInMembers.splice($index, 1)"
+                dnd-moved="queueMembers.splice($index, 1)"
                 dnd-effect-allowed="move"
                 dnd-selected="models.selected = checkedInMember"
                 ng-class="{'selected': models.selected === checkedInMember}"

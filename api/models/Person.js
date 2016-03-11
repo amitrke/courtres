@@ -12,7 +12,8 @@ module.exports = {
       email:'STRING',
       password:'STRING',
       type:'STRING',
-	  
+	  status:'STRING',
+      
       sex: {
         type: 'string',
         enum: ['M', 'F']
