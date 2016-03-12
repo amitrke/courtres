@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-HOME=$HOME/app-root/runtime
-cd ~/repo
-npm install bower
-./node_modules/.bin/bower install
+export HOME=$HOME/app-root/runtime/repo
+cd $HOME/assets
+../node_modules/bower/bin/bower install
