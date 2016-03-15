@@ -33,6 +33,9 @@
     "debug": "node debug app.js",
     "start": "node app.js"
   },
+  "engines": {
+    "node": "0.10.20"
+  }
   "main": "app.js",
   "repository": {
     "type": "git",
