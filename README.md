@@ -20,4 +20,4 @@ Technologies used:
 * Restangular
 * [AngularJS](https://angularjs.org/)
 * Bower
-* Twitter Bootstrap
+* Twitter Bootstrap.
