@@ -18,6 +18,6 @@ Technologies used:
 * [Sails](http://sailsjs.org)
 * NodeJS
 * Restangular
-* AngularJS
+* [AngularJS](https://angularjs.org/)
 * Bower
 * Twitter Bootstrap
