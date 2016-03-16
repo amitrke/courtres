@@ -60,6 +60,10 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                             
                             baseTimeslot.getList().then(function(timeslots){
                                 $scope.allTimeslots = timeslots;
+                                
+                                var date = new Date();
+                                var minutes = date.getMinutes();
+                                $scope.updateTimeSlotsForCurrentTime(minutes);
                             });
                             
                             baseCourt.getList().then(function(courts){
