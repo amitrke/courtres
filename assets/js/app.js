@@ -117,7 +117,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     }, 10000);
     
     $scope.updateTimeSlotsForCurrentTime = function(currMinutes){
-    	_.each($scope.allTimeslots, function(timeslot) {
+    	_.forEach($scope.allTimeslots, function(timeslot) {
     		  if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin+timeslot.duration){ //Current time Slot
     			  timeslot.current = true;
                   $scope.updateMembersInCurrentTimeSlot(timeslot);
@@ -129,7 +129,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     };
     
     $scope.updateMembersInCurrentTimeSlot = function(timeslot){
-        _.each(timeslot.reservation, function(member){
+        _.forEach(timeslot.reservation, function(member){
             if (member.status != "Playing"){
                 basePerson.get(member.id).then(function(person){
                     person.status = "Playing";
@@ -149,7 +149,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     $scope.updateQueue = function(){
         //TODO: Add facility ID to query.
         io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
-            _.each(resData, function(checkedInMember){
+            _.forEach(resData, function(checkedInMember){
                 var exists = _.find($scope.queueMembers, function(qm){
                     if (qm.id == checkedInMember.id || checkedInMember.reservation != null)
                         return true;
