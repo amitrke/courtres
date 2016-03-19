@@ -1,7 +1,8 @@
 module.exports.cron = {
-    autoCheckout: {
+    autoCheckout: { //Runs Hourly.
         schedule: '* */1 * * * *',
         onTick: function(){
+        	//Reset checkedInToFacility
             Person.find({"checkedInToFacility":{"!":null}}).exec(function findCB(err, found){
                 for (var i=0; i<found.length; i++){
                     var diff = Math.abs(new Date() - new Date(found[i].updatedAt));
@@ -15,7 +16,7 @@ module.exports.cron = {
                     }
                 }
             });
-            
+            //Reset reservation
             Person.find({"reservation":{"!":null}}).exec(function findCB(err, found){
                 for (var i=0; i<found.length; i++){
                     var diff = Math.abs(new Date() - new Date(found[i].updatedAt));
@@ -29,6 +30,17 @@ module.exports.cron = {
                     }
                 }
             });
+        }
+    },
+    
+    /*
+     * Runy every minute
+     * Checks for players that are playing, resets their status depending on the court time limit.
+     */
+    playCheck: {
+        schedule: '*/1 * * * * *',
+        onTick: function(){
+            
         }
     }
 }
