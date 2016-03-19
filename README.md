@@ -21,3 +21,13 @@ Technologies used:
 * [AngularJS](https://angularjs.org/)
 * Bower
 * Twitter Bootstrap.
+
+## Running this application on a machine
+* Download and install NodeJS
+* git clone this the master branch of this repo.
+* cd courtres
+* npm install
+* cd assets
+* ../node_modules/bower/bin/bower install
+* cd ..
+* sails lift
