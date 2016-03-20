@@ -77,7 +77,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			
                             //Listen to model change events.
                             io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
-                            io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
+                            //io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
                             //$location.path( "/" );
                         }
                     });
@@ -120,22 +120,34 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     	_.forEach($scope.allTimeslots, function(timeslot) {
     		  if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin+timeslot.duration){ //Current time Slot
     			  timeslot.current = true;
-                  $scope.updateMembersInCurrentTimeSlot(timeslot);
+                  $scope.updateMembersInTimeSlot(timeslot, "Playing");
     		  }
-    		  else { 
-    			  timeslot.current = false;
+    		  else {
+                if (timeslot.current == true){ //Current state is changing for this slot, members should be kicked out of it.
+                    $scope.updateMembersInTimeSlot(timeslot, "Queue");
+                    $scope.moveTimeSlotMembersToQueue(timeslot);
+                }
+    			timeslot.current = false;
     		  }
     	});
     };
-    
-    $scope.updateMembersInCurrentTimeSlot = function(timeslot){
+
+    $scope.moveTimeSlotMembersToQueue = function(timeslot){
         _.forEach(timeslot.reservation, function(member){
-            if (member.status != "Playing"){
+            $scope.queueMembers.push(member);
+        });
+        timeslot.reservation = null;
+        timeslot.save();
+    },
+
+    $scope.updateMembersInTimeSlot = function(timeslot, status){
+        _.forEach(timeslot.reservation, function(member){
+            if (member.status != status){
                 basePerson.get(member.id).then(function(person){
-                    person.status = "Playing";
+                    person.status = status;
                     person.save();
                 });
-                member.status = "Playing";
+                member.status = status;
             }
         });
     };
@@ -150,14 +162,16 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         //TODO: Add facility ID to query.
         io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
             _.forEach(resData, function(checkedInMember){
-                var exists = _.find($scope.queueMembers, function(qm){
-                    if (qm.id == checkedInMember.id || checkedInMember.reservation != null)
-                        return true;
-                    else
-                        return false;
-                });
-                if (!exists){
-                    $scope.queueMembers.push(checkedInMember);
+                if (checkedInMember.reservation == null){
+                    var exists = _.find($scope.queueMembers, function(qm){
+                        if (qm.id == checkedInMember.id)
+                            return true;
+                        else
+                            return false;
+                    });
+                    if (!exists){
+                        $scope.queueMembers.push(checkedInMember);
+                    }
                 }
             });
         });
@@ -194,6 +208,9 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			baseFacility.get($scope.facility.id).then(function (facility){
 				$scope.facility = facility;
 			});
+            basePerson.get(event.addedId).then(function(person){
+                $scope.queueMembers.push(person);
+            });
 		}
 	};
     
