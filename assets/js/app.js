@@ -3,8 +3,9 @@
 var courtresApp = angular.module('courtresApp', [
     'ngRoute',
     'restangular',
-	'ngMaterial',
-    'dndLists'
+	  'ngMaterial',
+    'dndLists',
+    'ui.bootstrap'
 ]);
 
 courtresApp.config(['$routeProvider',
