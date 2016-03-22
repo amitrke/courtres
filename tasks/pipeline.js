@@ -17,7 +17,8 @@ var tmpPath = '.tmp/public/';
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
     '/bower_components/angular-material/angular-material.css',
-  'styles/**/*.css'
+    '/bower_components/bootstrap/dist/css/bootstrap.css',
+    'styles/**/*.css'
 ];
 
 
