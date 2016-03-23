@@ -327,7 +327,8 @@ courtresApp.controller('PersonCtrl', ['$scope', '$routeParams', 'Restangular', f
     
 }]);
 
-courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular){
+courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location',
+                                        function($scope, $routeParams, Restangular, dataService, $location){
     var baseFacility = Restangular.all('facility');
     
     baseFacility.getList().then(function(facilities) {
@@ -338,6 +339,34 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
         baseFacility.post(facility);
     }
     
+    $scope.person = {'email':"dennis@gmail.com",'password':"abcd"};
+    
+    $scope.login = function(person, facility){
+        io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
+            if (resData != null && resData.length > 0){
+                $scope.authRequest = "success";
+				var user = resData[0];
+                dataService.setKV('user', user);
+				
+                baseFacility.get(facility).then(function(fac) {
+                    $scope.facility = fac;
+                    dataService.setKV('facility', fac);
+                    
+                    if (user.type == "admin")
+                        $location.path("/admin")
+                    else if (user.type == "member")
+                        $location.path("/member")
+                    else
+                        console.log("Unknown member type:",user.type)
+                });
+                
+				
+            }
+            else{
+                $scope.authRequest = "failure";
+            }
+        });
+    };
 }]);
 
 courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', '$http', 'dataService', '$location',

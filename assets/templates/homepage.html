@@ -1,11 +1,30 @@
-<div class="jumbotron">
-    <h1>Welcome to Court Reservation.</h1>
-    <p>Please select a facility to continue.</p>
+<div layout="column">
+  <div flex class="md-headline md-padding">
+      Welcome to Court Reservation.
+    </div>
+  <div flex>
+    <div class="md-padding" ng-controller="FacilityCtrl">
+        <h1 class="md-title">Login</h1>
+        <div layout="row">
+          <md-input-container>
+            <label>Username</label>
+            <input ng-model="person.email">
+          </md-input-container>
+          <md-input-container>
+            <label>Password</label>
+            <input type="password" ng-model="person.password">
+          </md-input-container>
+          <md-input-container>
+            <label>Facility</label>
+            <md-select ng-model="facility">
+              <md-option ng-repeat="facility in allFacilities" value="{{facility.id}}" ng-disabled="$index === 1">
+                {{facility.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+            <md-button class="md-raised md-primary" ng-click="login(person, facility)">Go</md-button>
+        </div>
+    </div>
 </div>
-<div class="col-sm-4">
-  <div class="list-group">
-    <a href="#/facility/{{facility.id}}" class="list-group-item active" ng-repeat="facility in allFacilities">
-      {{facility.name}}
-    </a>
-  </div>
-</div>
+
