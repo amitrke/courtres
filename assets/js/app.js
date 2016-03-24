@@ -2,10 +2,10 @@
 
 var courtresApp = angular.module('courtresApp', [
     'ngRoute',
+    'ngCookies',
     'restangular',
 	  'ngMaterial',
-    'dndLists',
-    'ui.bootstrap'
+    'dndLists'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -327,8 +327,8 @@ courtresApp.controller('PersonCtrl', ['$scope', '$routeParams', 'Restangular', f
     
 }]);
 
-courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location',
-                                        function($scope, $routeParams, Restangular, dataService, $location){
+courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$cookies',
+                                        function($scope, $routeParams, Restangular, dataService, $location, $cookies){
     var baseFacility = Restangular.all('facility');
     
     baseFacility.getList().then(function(facilities) {
@@ -338,8 +338,17 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     $scope.update = function(facility){
         baseFacility.post(facility);
     }
-    
-    $scope.person = {'email':"dennis@gmail.com",'password':"abcd"};
+    $scope.init = function(){
+                                        
+        //Try to read data from cookies.
+        var cUsername = $cookies.get('username');
+        var cPassword = $cookies.get('password');
+        var cFacility = $cookies.get('facility');
+        
+        if (cUsername != null && cPassword!=null && cFacility!=null){
+            $scope.person = {'email':cUsername, 'password':cPassword};                            
+        }
+    };
     
     $scope.login = function(person, facility){
         io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
@@ -348,10 +357,16 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
 				var user = resData[0];
                 dataService.setKV('user', user);
 				
+                var expireDate = new Date();
+                expireDate.setDate(expireDate.getDate() + 7);
+                
+                $cookies.put('email', person.email, {'expires': expireDate});
+                $cookies.put('password', person.password, {'expires': expireDate});
+
                 baseFacility.get(facility).then(function(fac) {
                     $scope.facility = fac;
                     dataService.setKV('facility', fac);
-                    
+                                        
                     if (user.type == "admin")
                         $location.path("/admin")
                     else if (user.type == "member")
@@ -361,53 +376,6 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
                 });
                 
 				
-            }
-            else{
-                $scope.authRequest = "failure";
-            }
-        });
-    };
-}]);
-
-courtresApp.controller('FacilityHomeCtrl', ['$scope', '$routeParams', 'Restangular', '$http', 'dataService', '$location',
-                                            function($scope, $routeParams, Restangular, $http, dataService, $location){
-    
-    $scope.init = function(){
-        
-        var baseFacility = Restangular.all('facility');
-    
-        baseFacility.get($routeParams.facilityid).then(function(facility) {
-            $scope.facility = facility;
-            dataService.setKV('facility', facility);
-        });
-
-        if (dataService.getKV('user') != null && dataService.getKV('facility') != null){
-            var user = dataService.getKV('user');
-            
-            if (user.type == "admin")
-                $location.path("/admin")
-            else if (user.type == "member")
-                $location.path("/member")
-            else
-                console.log("Unknown member type:",user.type)
-        }
-    }
-    
-	$scope.person = {'email':"dennis@gmail.com",'password':"abcd"};
-	
-    $scope.login = function(person){
-        io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
-            if (resData != null && resData.length > 0){
-                $scope.authRequest = "success";
-				var user = resData[0];
-                dataService.setKV('user', user);
-				
-				if (user.type == "admin")
-					$location.path("/admin")
-				else if (user.type == "member")
-					$location.path("/member")
-				else
-					console.log("Unknown member type:",user.type)
             }
             else{
                 $scope.authRequest = "failure";
