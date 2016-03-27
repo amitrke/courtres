@@ -20,7 +20,7 @@ Technologies used:
 * Restangular
 * [AngularJS](https://angularjs.org/)
 * Bower
-* Twitter Bootstrap.
+
 
 ## Running this application on a machine
 * Download and install NodeJS
