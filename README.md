@@ -23,7 +23,7 @@ Technologies used:
 
 
 ## Running this application on a machine
-* Download and install NodeJS
+* Download and [install NodeJS](https://docs.npmjs.com/getting-started/installing-node)
 * git clone this the master branch of this repo.
 * cd courtres
 * npm install
