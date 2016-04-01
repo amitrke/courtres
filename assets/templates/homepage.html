@@ -1,9 +1,9 @@
-<div layout="column" data-ng-init="init()">
+<div layout="column" data-ng-init="init()" ng-controller="FacilityCtrl">
   <div flex class="md-headline md-padding">
       Welcome to Court Reservation.
     </div>
   <div flex>
-    <div class="md-padding" ng-controller="FacilityCtrl">
+    <div class="md-padding">
         <h1 class="md-title">Login</h1>
         <div layout="row">
           <md-input-container>
@@ -22,6 +22,13 @@
               </md-option>
             </md-select>
           </md-input-container>
+    </div>
+    <div flex>
+        <md-switch ng-model="data.cb1" aria-label="Switch 1">
+            Remember me: {{ data.cb1 }}
+          </md-switch>
+    </div>
+    <div flex>
         </div>
             <md-button class="md-raised md-primary" ng-click="login(person, facility)">Go</md-button>
         </div>
