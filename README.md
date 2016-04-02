@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.org/amitrke/courtres.svg?branch=master)](https://travis-ci.org/amitrke/courtres)
 [![Build Status](https://david-dm.org/amitrke/courtres.svg?branch=master)](https://david-dm.org/amitrke/courtres)
 
+[![Code Climate](https://codeclimate.com/github/amitrke/courtres/badges/gpa.svg)](https://codeclimate.com/github/amitrke/courtres)
+[![Test Coverage](https://codeclimate.com/github/amitrke/courtres/badges/coverage.svg)](https://codeclimate.com/github/amitrke/courtres/coverage)
+[![Issue Count](https://codeclimate.com/github/amitrke/courtres/badges/issue_count.svg)](https://codeclimate.com/github/amitrke/courtres)
+
 # Court Reservation Application.
 
 This project is work-in-progress
