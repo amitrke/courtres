@@ -347,7 +347,7 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
         var cPassword = $cookies.get('password');
         var cFacility = $cookies.get('facility');
         
-        if (cUsername !== 'undefined' && cPassword !== 'undefined' && cFacility !== 'undefined' &&
+        if (cUsername !== undefined && cPassword !== undefined && cFacility !== undefined &&
             cUsername !== null && cPassword !== null && cFacility !== null){
             $scope.person = {'email':cUsername, 'password':cPassword};
             baseFacility.get(cFacility).then(function(fac) {
