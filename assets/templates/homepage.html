@@ -16,7 +16,7 @@
           </md-input-container>
           <md-input-container>
             <label>Facility</label>
-            <md-select ng-model="facility">
+            <md-select ng-model="facility" ng-model-options="{trackBy: '$value.id'}">
               <md-option ng-repeat="facility in allFacilities" value="{{facility.id}}" ng-disabled="$index === 1">
                 {{facility.name}}
               </md-option>
@@ -24,13 +24,13 @@
           </md-input-container>
     </div>
     <div flex>
-        <md-switch ng-model="data.cb1" aria-label="Switch 1">
-            Remember me: {{ data.cb1 }}
+        <md-switch ng-model="rememberMe" aria-label="Switch 1">
+            Remember me: {{ rememberMe }}
           </md-switch>
     </div>
     <div flex>
         </div>
-            <md-button class="md-raised md-primary" ng-click="login(person, facility)">Go</md-button>
+            <md-button class="md-raised md-primary" ng-click="login(person, facility, rememberMe)">Go</md-button>
         </div>
     </div>
 </div>

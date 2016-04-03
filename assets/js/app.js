@@ -339,20 +339,25 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
         baseFacility.post(facility);
     }
     $scope.init = function(){
-                                        
+        
+        $scope.rememberMe = true;
+
         //Try to read data from cookies.
         var cUsername = $cookies.get('username');
         var cPassword = $cookies.get('password');
         var cFacility = $cookies.get('facility');
         
-        if (cUsername != null && cPassword!=null && cFacility!=null){
-            $scope.person = {'email':cUsername, 'password':cPassword};                            
+        if (cUsername !== null && cPassword !== null && cFacility !== null){
+            $scope.person = {'email':cUsername, 'password':cPassword};
+            baseFacility.get(cFacility).then(function(fac) {
+                $scope.facility = fac;
+            });
         }
     };
     
-    $scope.login = function(person, facility){
+    $scope.login = function(person, facility, rememberMe){
         io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
-            if (resData != null && resData.length > 0){
+            if (resData !== null && resData.length > 0){
                 $scope.authRequest = "success";
 				var user = resData[0];
                 dataService.setKV('user', user);
@@ -360,16 +365,23 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
                 var expireDate = new Date();
                 expireDate.setDate(expireDate.getDate() + 7);
                 
-                $cookies.put('email', person.email, {'expires': expireDate});
-                $cookies.put('password', person.password, {'expires': expireDate});
+                if (rememberMe){
+                    $cookies.put('username', person.email, {'expires': expireDate});
+                    $cookies.put('password', person.password, {'expires': expireDate});
+                    $cookies.put('facility', facility, {'expires': expireDate});
+                }
+                else{
+                    $cookies.remove('username');
+                    $cookies.remove('password');
+                }
 
                 baseFacility.get(facility).then(function(fac) {
                     $scope.facility = fac;
                     dataService.setKV('facility', fac);
-                                        
-                    if (user.type == "admin")
+
+                    if (user.type === "admin")
                         $location.path("/admin")
-                    else if (user.type == "member")
+                    else if (user.type === "member")
                         $location.path("/member")
                     else
                         console.log("Unknown member type:",user.type)
