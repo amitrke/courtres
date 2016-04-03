@@ -48,7 +48,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
-        if (facility == null || user == null){
+        if (facility === null || user === null){
             //Stub the data.
             io.socket.get('/person?where={"email":"dennis@gmail.com"}', function (resData) {
                 if (resData.length > 0){
@@ -124,7 +124,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                   $scope.updateMembersInTimeSlot(timeslot, "Playing");
     		  }
     		  else {
-                if (timeslot.current == true){ //Current state is changing for this slot, members should be kicked out of it.
+                if (timeslot.current === true){ //Current state is changing for this slot, members should be kicked out of it.
                     $scope.updateMembersInTimeSlot(timeslot, "Queue");
                     $scope.moveTimeSlotMembersToQueue(timeslot);
                 }
@@ -155,7 +155,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         
     $scope.filterTimeSlots = function(court){
         return function(timeslot) {
-            return timeslot.court.id == court.id;
+            return timeslot.court.id === court.id;
         }
     };
     
@@ -163,9 +163,9 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         //TODO: Add facility ID to query.
         io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
             _.forEach(resData, function(checkedInMember){
-                if (checkedInMember.reservation == null){
+                if (checkedInMember.reservation === null){
                     var exists = _.find($scope.queueMembers, function(qm){
-                        if (qm.id == checkedInMember.id)
+                        if (qm.id === checkedInMember.id)
                             return true;
                         else
                             return false;
@@ -205,7 +205,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 		TODO: 1. If using a local array, then unique items should be maintained.
 			  2. Handle the situation of removing the checkedInMembers.
 		*/
-		if (event.verb == 'addedTo' && event.attribute == "checkedInMembers" && event.id == $scope.facility.id){
+		if (event.verb === 'addedTo' && event.attribute === "checkedInMembers" && event.id === $scope.facility.id){
 			baseFacility.get($scope.facility.id).then(function (facility){
 				$scope.facility = facility;
 			});
@@ -227,7 +227,7 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
-        if (facility == null || user == null){
+        if (facility === null || user === null){
             $location.path( "/" );
         }
         else{
@@ -293,7 +293,7 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     
 	var getCachedPerson = function(id){
 		for (var i=0; i<$scope.allMembers.length; i++){
-			if ($scope.allMembers[i].id == id){
+			if ($scope.allMembers[i].id === id){
 				return $scope.allMembers[i];
 			}
 		}
@@ -306,7 +306,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
-        if (facility == null || user == null){
+        if (facility === null || user === null){
             $location.path( "/" );
         }
         else{
@@ -347,7 +347,8 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
         var cPassword = $cookies.get('password');
         var cFacility = $cookies.get('facility');
         
-        if (cUsername !== null && cPassword !== null && cFacility !== null){
+        if (cUsername !== 'undefined' && cPassword !== 'undefined' && cFacility !== 'undefined' &&
+            cUsername !== null && cPassword !== null && cFacility !== null){
             $scope.person = {'email':cUsername, 'password':cPassword};
             baseFacility.get(cFacility).then(function(fac) {
                 $scope.facility = fac;
