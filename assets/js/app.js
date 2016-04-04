@@ -4,8 +4,9 @@ var courtresApp = angular.module('courtresApp', [
     'ngRoute',
     'ngCookies',
     'restangular',
-	  'ngMaterial',
-    'dndLists'
+	'ngMaterial',
+    'dndLists',
+    'ngMessages'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -345,14 +346,15 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
         //Try to read data from cookies.
         var cUsername = $cookies.get('username');
         var cPassword = $cookies.get('password');
-        var cFacility = $cookies.get('facility');
+        //var cFacility = $cookies.get('facility');
         
-        if (cUsername !== undefined && cPassword !== undefined && cFacility !== undefined &&
-            cUsername !== null && cPassword !== null && cFacility !== null){
+        if (cUsername !== undefined && cPassword !== undefined && /*cFacility !== undefined &&*/
+            cUsername !== null && cPassword !== null /*&& cFacility !== null*/){
             $scope.person = {'email':cUsername, 'password':cPassword};
-            baseFacility.get(cFacility).then(function(fac) {
+            /*baseFacility.get(cFacility).then(function(fac) {
                 $scope.facility = fac;
             });
+            */
         }
     };
     
@@ -369,7 +371,7 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
                 if (rememberMe){
                     $cookies.put('username', person.email, {'expires': expireDate});
                     $cookies.put('password', person.password, {'expires': expireDate});
-                    $cookies.put('facility', facility, {'expires': expireDate});
+                    //$cookies.put('facility', facility, {'expires': expireDate});
                 }
                 else{
                     $cookies.remove('username');

@@ -1,4 +1,5 @@
-<div layout="column" data-ng-init="init()" ng-controller="FacilityCtrl">
+<div ng-cloak layout="column" data-ng-init="init()" ng-controller="FacilityCtrl">
+<form name="userForm">
   <div flex class="md-headline md-padding">
       Welcome to Court Reservation.
     </div>
@@ -8,19 +9,28 @@
         <div layout="row">
           <md-input-container>
             <label>Username</label>
-            <input ng-model="person.email">
+            <input name="email" ng-model="person.email" required>
+            <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
+              <div ng-message="required">This is required!</div>
+            </div>
           </md-input-container>
           <md-input-container>
             <label>Password</label>
-            <input type="password" ng-model="person.password">
+            <input type="password" ng-model="person.password" required>
+            <div ng-messages="userForm.passwrod.$error" ng-show="userForm.password.$dirty">
+              <div ng-message="required">This is required!</div>
+            </div>
           </md-input-container>
           <md-input-container>
             <label>Facility</label>
-            <md-select ng-model="facility" ng-model-options="{trackBy: '$value.id'}">
+            <md-select ng-model="facility" ng-model-options="{trackBy: '$value.id'}" required>
               <md-option ng-repeat="facility in allFacilities" value="{{facility.id}}" ng-disabled="$index === 1">
                 {{facility.name}}
               </md-option>
             </md-select>
+            <div ng-messages="userForm.facility.$error" ng-if="userForm.$dirty">
+              <div ng-message="required">This is required!</div>
+            </div>
           </md-input-container>
     </div>
     <div flex>
@@ -30,8 +40,9 @@
     </div>
     <div flex>
         </div>
-            <md-button class="md-raised md-primary" ng-click="login(person, facility, rememberMe)">Go</md-button>
+            <md-button class="md-raised md-primary" ng-click="userForm.$valid && login(person, facility, rememberMe)" 
+                       ng-disabled="userForm.$invalid">Go</md-button>
         </div>
     </div>
+</form>
 </div>
-

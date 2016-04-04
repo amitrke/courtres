@@ -34,6 +34,7 @@ var jsFilesToInject = [
 	'/bower_components/angular-animate/angular-animate.js',
     '/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
     '/bower_components/angular-cookies/angular-cookies.js',
+    '/bower_components/angular-messages/angular-messages.js',
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 
