@@ -4,7 +4,7 @@
     <section flex>
         Queue
 		<ul dnd-list="queueMembers"
-            dnd-drop="queueDrop(event, index, item, external, type)">
+            dnd-drop="timeslotDrop(event, index, item, external, type, null)">
 		  <li ng-repeat="checkedInMember in queueMembers" 
                 dnd-draggable="checkedInMember"
                 dnd-moved="queueMembers.splice($index, 1)"

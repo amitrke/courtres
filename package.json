@@ -24,11 +24,10 @@
     "sails-disk": "~0.10.9",
 
     "npm": "~2.7.4",
-    "sails-mongo": "^0.11.5",
+    "sails-mongo": "^0.12.0",
     "bower": "^1.4.1",
-    "forever": "^0.11.1",
     "q": "^1.4.1",
-    "sails-hook-cron": "~2.1.1"
+    "sails-hook-cron": "~2.2.0"
   },
   "scripts": {
     "debug": "node debug app.js",

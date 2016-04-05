@@ -186,14 +186,6 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         });
        return item;
     };
-    
-    $scope.queueDrop = function(event, index, item, external, type){
-        basePerson.get(item.id).then(function(person){
-            person.reservation = null;
-            person.save();
-        });
-       return item;
-    };
 	
     $scope.getCourtTimeSlots = function(id){
         baseCourt.get(id).then(function(court){
