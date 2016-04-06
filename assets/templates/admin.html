@@ -27,14 +27,66 @@
             <ul ui-sortable="sortableOptions" ng-model="facility.checkedInMembers">
               <li ng-repeat="checkedInMember in facility.checkedInMembers">{{ checkedInMember.name }}</li>
             </ul>
+            <a href="#/board" class="list-group-item active">Board</a>
         </md-content>
       </md-tab>
       <md-tab label="New-User">
         <md-content class="md-padding">
           <h1 class="md-display-2">New User</h1>
-          <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.
-            <a href="#/board" class="list-group-item active">Board</a>
-            </p>
+          
+         <form name="newUserForm">
+          <md-input-container class="md-block">
+            <label>Description</label>
+            <input md-maxlength="30" required md-no-asterisk name="description" ng-model="project.description">
+            <div ng-messages="newUserForm.description.$error">
+              <div ng-message="required">This is required.</div>
+              <div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Name</label>
+            <input required name="clientName" ng-model="person.name">
+            <div ng-messages="newUserForm.clientName.$error">
+              <div ng-message="required">This is required.</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Email</label>
+            <input required type="email" name="clientEmail" ng-model="project.clientEmail"
+                   minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+            <div ng-messages="newUserForm.clientEmail.$error" role="alert">
+              <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                Your email must be between 10 and 100 characters long and look like an e-mail address.
+              </div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Hourly Rate (USD)</label>
+            <input required type="number" step="any" name="rate" ng-model="project.rate" min="800"
+                   max="4999" ng-pattern="/^1234$/" />
+            <div ng-messages="newUserForm.rate.$error" multiple md-auto-hide="false">
+              <div ng-message="required">
+                You've got to charge something! You can't just <b>give away</b> a Missile Defense
+                System.
+              </div>
+              <div ng-message="min">
+                You should charge at least $800 an hour. This job is a big deal... if you mess up,
+                everyone dies!
+              </div>
+              <div ng-message="pattern">
+                You should charge exactly $1,234.
+              </div>
+              <div ng-message="max">
+                {{newUserForm.rate.$viewValue | currency:"$":0}} an hour? That's a little ridiculous. I
+                doubt even Bill Clinton could afford that.
+              </div>
+            </div>
+          </md-input-container>
+          <p style="font-size:.8em; width: 100%; text-align: center;">
+            Make sure to include <a href="https://docs.angularjs.org/api/ngMessages" target="_blank">ngMessages</a> module when using ng-message markup.
+          </p>
+        </form>
+            
         </md-content>
       </md-tab>
       <md-tab label="three">

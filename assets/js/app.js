@@ -5,8 +5,8 @@ var courtresApp = angular.module('courtresApp', [
     'ngCookies',
     'restangular',
 	'ngMaterial',
-    'dndLists',
-    'ngMessages'
+    'ngMessages',
+    'dndLists'
 ]);
 
 courtresApp.config(['$routeProvider',
@@ -164,7 +164,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         //TODO: Add facility ID to query.
         io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
             _.forEach(resData, function(checkedInMember){
-                if (checkedInMember.reservation === null){
+                if (checkedInMember.reservation === undefined){
                     var exists = _.find($scope.queueMembers, function(qm){
                         if (qm.id === checkedInMember.id)
                             return true;
