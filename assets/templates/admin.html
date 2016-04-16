@@ -44,7 +44,7 @@
           </md-input-container>
           <md-input-container class="md-block">
             <label>Email</label>
-            <input required type="email" name="clientEmail" ng-model="project.clientEmail"
+            <input required type="email" name="clientEmail" ng-model="person.email"
                    minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
             <div ng-messages="newUserForm.clientEmail.$error" role="alert">
               <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
@@ -54,13 +54,13 @@
           </md-input-container>
           <md-input-container class="md-block">
             <label>Password</label>
-            <input md-maxlength="30" md-minlength="4" required name="password" ng-model="project.password">
+            <input md-maxlength="30" md-minlength="4" required name="password" ng-model="person.password">
             <div ng-messages="newUserForm.password.$error">
               <div ng-message="required">This is required.</div>
               <div ng-message="md-maxlength">The password has to be 4 to 30 characters long.</div>
             </div>
           </md-input-container>
-          <md-button class="md-raised md-primary" ng-click="newUserForm.$valid" 
+          <md-button class="md-raised md-primary" ng-click="newUserForm.$valid; createNewUser(person)" 
                        ng-disabled="newUserForm.$invalid">Create User</md-button>
         </form>
             

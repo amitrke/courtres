@@ -216,11 +216,12 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 
 courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     var baseFacility = Restangular.all('facility');
+    var basePerson = Restangular.all('person');
 	
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
-        if (facility === null || user === null){
+        if (facility === undefined || user === undefined){
             $location.path( "/" );
         }
         else{
@@ -231,6 +232,14 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
 			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
+    };
+
+    $scope.createNewUser = function(person){
+        person.type = "member";
+        person.facilities = $scope.facility;
+        person.checkedInToFacility = $scope.facility;
+        basePerson.post(person);
+        $scope.person = null;
     };
 	
 	$scope.querySearch = function(query) {
@@ -277,8 +286,6 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			$scope.facility = event.data;
 		}
 	};
-	
-    var basePerson = Restangular.all('person');
     
     basePerson.getList().then(function(persons) {
       $scope.allMembers = persons;
