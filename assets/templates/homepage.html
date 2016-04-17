@@ -35,7 +35,7 @@
     </div>
     <div flex>
         <md-switch ng-model="rememberMe" aria-label="Switch 1">
-            Remember me: {{ rememberMe }}
+            Remember me
           </md-switch>
     </div>
     <div flex>
@@ -43,6 +43,9 @@
             <md-button class="md-raised md-primary" ng-click="userForm.$valid && login(person, facility, rememberMe)" 
                        ng-disabled="userForm.$invalid">Go</md-button>
         </div>
+        <div ng-if="authRequest=='failure'">
+              Incorrect username/password !
+            </div>
     </div>
 </form>
 </div>
