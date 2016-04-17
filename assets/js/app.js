@@ -214,7 +214,8 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     
 }]);
 
-courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
+courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$mdToast', 
+    function($scope, $routeParams, Restangular, dataService, $location, $mdToast){
     var baseFacility = Restangular.all('facility');
     var basePerson = Restangular.all('person');
 	
@@ -240,6 +241,11 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         person.checkedInToFacility = $scope.facility;
         basePerson.post(person);
         $scope.person = null;
+        $mdToast.show(
+            $mdToast.simple()
+            .textContent('Saved successfully !')
+            .hideDelay(3000)
+        );
     };
 	
 	$scope.querySearch = function(query) {
