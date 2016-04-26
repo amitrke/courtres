@@ -2,3 +2,6 @@
 sails.io.js
 **/bower_components/*
 api/*
+Gruntfile.js
+app.js
+server.js

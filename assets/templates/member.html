@@ -1,7 +1,22 @@
-<div class="jumbotron" data-ng-init="init()">
-    <h2>Hey {{user.name}} welcome to {{facility.name}}</h2>
-    <p></p>
-</div>
-<div class="alert alert-info" role="alert">
-    The facility admin has not yet checked you in.
+<div ng-cloak data-ng-init="init()">
+	<md-content>
+		<md-tabs md-dynamic-height md-border-bottom>
+			<md-tab label="CheckIn">
+				<md-content class="md-padding">
+					<h2>Hey {{user.name}} welcome to {{facility.name}}</h2>
+					<div ng-if = "user.checkedInToFacility == undefined">
+						The facility admin has not yet checked you in.
+					</div>
+					<div ng-if = "user.checkedInToFacility">
+						Select a timeslot to play.
+					</div>
+				</md-content>
+			</md-tab>
+			<md-tab label="Edit Profile">
+				<md-content class="md-padding">
+					Edit Profile
+				</md-content>
+			</md-tab>
+		</md-tabs>
+	</md-content>
 </div>

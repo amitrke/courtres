@@ -283,12 +283,12 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 		TODO: 1. If using a local array, then unique items should be maintained.
 			  2. Handle the situation of removing the checkedInMembers.
 		*/
-		if (event.verb == 'addedTo' && event.attribute == "checkedInMembers" && event.id == $scope.facility.id){
+		if (event.verb === 'addedTo' && event.attribute === "checkedInMembers" && event.id === $scope.facility.id){
 			baseFacility.get($scope.facility.id).then(function (facility){
 				$scope.facility = facility;
 			});
 		}
-		else if (event.verb == 'updated' && event.data.id == $scope.facility.id){
+		else if (event.verb === 'updated' && event.data.id === $scope.facility.id){
 			$scope.facility = event.data;
 		}
 	};
@@ -310,15 +310,28 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     
     $scope.init = function(){
+
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
-        if (facility === null || user === null){
+
+        if (facility === undefined || user === undefined){
             $location.path( "/" );
         }
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
 			
+            io.socket.on("person", function(event){$scope.onPersonChange(event);});
+        }
+    };
+
+    $scope.onPersonChange = function(event){
+        /*
+        TODO: 1. If using a local array, then unique items should be maintained.
+              2. Handle the situation of removing the checkedInMembers.
+        */
+        if (event.verb === 'updated' && event.data.id === $scope.user.id && event.data.checkedInToFacility === $scope.facility.id){
+            $scope.user = event.data;
         }
     };
     
