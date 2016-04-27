@@ -4,10 +4,10 @@
 			<md-tab label="CheckIn">
 				<md-content class="md-padding">
 					<h2>Hey {{user.name}} welcome to {{facility.name}}</h2>
-					<div ng-if = "user.checkedInToFacility == undefined">
+					<div ng-if = "checkedInToFacility == undefined">
 						The facility admin has not yet checked you in.
 					</div>
-					<div ng-if = "user.checkedInToFacility">
+					<div ng-if = "checkedInToFacility">
 						Select a timeslot to play.
 					</div>
 				</md-content>

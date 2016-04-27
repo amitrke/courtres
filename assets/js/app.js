@@ -313,6 +313,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
 
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
+        $scope.checkedInToFacility = undefined;
 
         if (facility === undefined || user === undefined){
             $location.path( "/" );
@@ -320,7 +321,8 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
-			
+            $scope.checkedInToFacility = $scope.user.checkedInToFacility;
+
             io.socket.on("person", function(event){$scope.onPersonChange(event);});
         }
     };
@@ -331,7 +333,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
               2. Handle the situation of removing the checkedInMembers.
         */
         if (event.verb === 'updated' && event.data.id === $scope.user.id && event.data.checkedInToFacility === $scope.facility.id){
-            $scope.user = event.data;
+            $scope.checkedInToFacility = event.data.checkedInToFacility;
         }
     };
     
