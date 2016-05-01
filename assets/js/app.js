@@ -60,7 +60,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                             dataService.setKV('facility',resData[0]);
                             $scope.facility = resData[0];
                             
-                            baseTimeslot.getList().then(function(timeslots){
+                            baseTimeslot.getList().then(function(timeslots){ //TODO: Fetch only the timeslots for this facility.
                                 $scope.allTimeslots = timeslots;
                                 
                                 var date = new Date();
@@ -91,7 +91,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             $scope.user = dataService.getKV('user');
 			$scope.courts = [];
             
-			 baseTimeslot.getList().then(function(timeslots){
+			 baseTimeslot.getList().then(function(timeslots){ //TODO: Fetch only the timeslots for this facility.
                 $scope.allTimeslots = timeslots;
             });
 
@@ -309,6 +309,8 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
     
+    var baseTimeslot = Restangular.all('timeslots');
+
     $scope.init = function(){
 
         var facility = dataService.getKV('facility');
@@ -322,6 +324,10 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
             $scope.checkedInToFacility = $scope.user.checkedInToFacility;
+
+            baseTimeslot.getList().then(function(timeslots){ //TODO: Fetch only the timeslots for this facility.
+                $scope.timeslots = timeslots;
+            });
 
             io.socket.on("person", function(event){$scope.onPersonChange(event);});
         }

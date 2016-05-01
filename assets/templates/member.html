@@ -7,8 +7,24 @@
 					<div ng-if = "checkedInToFacility == undefined">
 						The facility admin has not yet checked you in.
 					</div>
-					<div ng-if = "checkedInToFacility">
-						Select a timeslot to play.
+					<div ng-if = "checkedInToFacility != null">
+						Select a timeslot to play, Selected Court = {{selectedCourt}}.
+
+						<form name="reservationForm">
+							<md-input-container style="margin-right: 10px;">
+					        <label>Court</label>
+					        <md-select ng-model="selectedCourt">
+					          <md-option ng-repeat="thisCourt in facility.courts" value="{{thisCourt.name}}">{{thisCourt.name}}</md-option>
+					        </md-select>
+					      </md-input-container>
+					      <md-input-container>
+					        <label>TimeSlot</label>
+					        <md-select ng-model="selectedTimeSlot">
+					            <md-option ng-value="timeslot.startMin" ng-repeat="timeslot in timeslots | filter: {court:{name:selectedCourt}}">{{timeslot.startMin}}</md-option>
+					        </md-select>
+					      </md-input-container>
+						</form>
+
 					</div>
 				</md-content>
 			</md-tab>
