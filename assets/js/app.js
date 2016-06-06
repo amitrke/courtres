@@ -38,14 +38,14 @@ courtresApp.config(['$routeProvider',
 
 courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$interval',
                                      function($scope, $routeParams, Restangular, dataService, $location, $interval){
-    
+
     var baseCourt = Restangular.all('courts');
     var baseFacility = Restangular.all('facility');
 	var baseTimeslot = Restangular.all('timeslots');
     var basePerson = Restangular.all('person');
-    
+
     $scope.queueMembers = [];
-                                         
+
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
@@ -59,24 +59,24 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
                         if (resData.length > 0){
                             dataService.setKV('facility',resData[0]);
                             $scope.facility = resData[0];
-                            
+
                             baseTimeslot.getList().then(function(timeslots){ //TODO: Fetch only the timeslots for this facility.
                                 $scope.allTimeslots = timeslots;
-                                
+
                                 var date = new Date();
                                 var minutes = date.getMinutes();
                                 $scope.updateTimeSlotsForCurrentTime(minutes);
                             });
-                            
+
                             baseCourt.getList().then(function(courts){
                                 $scope.allCourts = courts;
                             });
-                            
+
                             $scope.updateQueue();
-                            
+
                             $scope.courts = [];
                             //setTimeslotDetails($scope.facility);
-			
+
                             //Listen to model change events.
                             io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
                             //io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
@@ -90,7 +90,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
 			$scope.courts = [];
-            
+
 			 baseTimeslot.getList().then(function(timeslots){ //TODO: Fetch only the timeslots for this facility.
                 $scope.allTimeslots = timeslots;
             });
@@ -109,15 +109,15 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
         }
     };
-    
+
     $interval(function(){
     	//Get Minutes
     	var date = new Date();
     	var minutes = date.getMinutes();
     	$scope.updateTimeSlotsForCurrentTime(minutes);
-    	
+
     }, 10000);
-    
+
     $scope.updateTimeSlotsForCurrentTime = function(currMinutes){
     	_.forEach($scope.allTimeslots, function(timeslot) {
     		  if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin+timeslot.duration){ //Current time Slot
@@ -153,13 +153,13 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             }
         });
     };
-        
+
     $scope.filterTimeSlots = function(court){
         return function(timeslot) {
             return timeslot.court.id === court.id;
         }
     };
-    
+
     $scope.updateQueue = function(){
         //TODO: Add facility ID to query.
         io.socket.get('/person?where={"checkedInToFacility":{"!":null}}', function (resData) {
@@ -178,7 +178,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             });
         });
     };
-    
+
     $scope.timeslotDrop = function(event, index, item, external, type, timeslot){
         basePerson.get(item.id).then(function(person){
             person.reservation = timeslot;
@@ -186,13 +186,13 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         });
        return item;
     };
-	
+
     $scope.getCourtTimeSlots = function(id){
         baseCourt.get(id).then(function(court){
             return court.timeSlots;
         });
     };
-	
+
 	$scope.onFacilityChange = function(event){
 		/*
 		TODO: 1. If using a local array, then unique items should be maintained.
@@ -207,18 +207,18 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             });
 		}
 	};
-    
+
     $scope.queueMove = function(event, index, item){
         $scope.queueMembers.splice(index, 1);
     };
-    
+
 }]);
 
-courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$mdToast', 
+courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$mdToast',
     function($scope, $routeParams, Restangular, dataService, $location, $mdToast){
     var baseFacility = Restangular.all('facility');
     var basePerson = Restangular.all('person');
-	
+
     $scope.init = function(){
         var facility = dataService.getKV('facility');
         var user = dataService.getKV('user');
@@ -228,7 +228,7 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         else{
             $scope.facility = dataService.getKV('facility');
             $scope.user = dataService.getKV('user');
-			
+
 			//Listen to model change events.
 			io.socket.on("facility", function(event){$scope.onFacilityChange(event);})
 			io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
@@ -247,7 +247,7 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
             .hideDelay(3000)
         );
     };
-	
+
 	$scope.querySearch = function(query) {
       var results = query ? $scope.allMembers.filter( $scope.createFilterFor(query) ) : $scope.allMembers,
           deferred;
@@ -259,17 +259,17 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         return results;
       }
     }
-	
+
     $scope.searchTextChange = function(text) {
       console.log('Text changed to ' + text);
     }
-	
+
     $scope.selectedItemChange = function(item) {
 		item.checkedInToFacility = $scope.facility;
 		item.save();
 		console.log('Item changed to ' + JSON.stringify(item));
     }
-	
+
 	$scope.createFilterFor = function(query) {
       var lowercaseQuery = angular.lowercase(query);
       return function filterFn(person) {
@@ -277,7 +277,7 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 		return (localcasename.indexOf(lowercaseQuery) === 0);
       };
     }
-	
+
 	$scope.onFacilityChange = function(event){
 		/*
 		TODO: 1. If using a local array, then unique items should be maintained.
@@ -292,11 +292,11 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			$scope.facility = event.data;
 		}
 	};
-    
+
     basePerson.getList().then(function(persons) {
       $scope.allMembers = persons;
     });
-    
+
 	var getCachedPerson = function(id){
 		for (var i=0; i<$scope.allMembers.length; i++){
 			if ($scope.allMembers[i].id === id){
@@ -304,11 +304,11 @@ courtresApp.controller('AdminCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 			}
 		}
 	}
-   
+
 }]);
 
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
-    
+
     var baseTimeslot = Restangular.all('timeslots');
 
     $scope.init = function(){
@@ -342,22 +342,25 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
             $scope.checkedInToFacility = event.data.checkedInToFacility;
         }
     };
-    
+
+    $scope.onReserve = function(selectedCourt, selectedTimeSlot){
+        console.log(selectedCourt + selectedTimeSlot);
+    };
 }]);
 
 courtresApp.controller('PersonCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular){
     var basePerson = Restangular.all('person');
-    
+
     $scope.update = function(person){
         basePerson.post(person);
     }
-    
+
 }]);
 
 courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$cookies',
                                         function($scope, $routeParams, Restangular, dataService, $location, $cookies){
     var baseFacility = Restangular.all('facility');
-    
+
     baseFacility.getList().then(function(facilities) {
       $scope.allFacilities = facilities;
     });
@@ -366,14 +369,14 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
         baseFacility.post(facility);
     }
     $scope.init = function(){
-        
+
         $scope.rememberMe = true;
 
         //Try to read data from cookies.
         var cUsername = $cookies.get('username');
         var cPassword = $cookies.get('password');
         //var cFacility = $cookies.get('facility');
-        
+
         if (cUsername !== undefined && cPassword !== undefined && /*cFacility !== undefined &&*/
             cUsername !== null && cPassword !== null /*&& cFacility !== null*/){
             $scope.person = {'email':cUsername, 'password':cPassword};
@@ -383,17 +386,17 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
             */
         }
     };
-    
+
     $scope.login = function(person, facility, rememberMe){
         io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
             if (resData !== null && resData.length > 0){
                 $scope.authRequest = "success";
 				var user = resData[0];
                 dataService.setKV('user', user);
-				
+
                 var expireDate = new Date();
                 expireDate.setDate(expireDate.getDate() + 7);
-                
+
                 if (rememberMe){
                     $cookies.put('username', person.email, {'expires': expireDate});
                     $cookies.put('password', person.password, {'expires': expireDate});
@@ -415,8 +418,8 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
                     else
                         console.log("Unknown member type:",user.type)
                 });
-                
-				
+
+
             }
             else{
                 $scope.authRequest = "failure";

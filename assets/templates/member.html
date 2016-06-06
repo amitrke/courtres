@@ -1,4 +1,4 @@
-<div ng-cloak data-ng-init="init()">
+<div ng-cloak data-ng-init="init()" ng-controller="MemberCtrl">
 	<md-content>
 		<md-tabs md-dynamic-height md-border-bottom>
 			<md-tab label="CheckIn">
@@ -23,7 +23,7 @@
 					            <md-option ng-value="timeslot.startMin" ng-repeat="timeslot in timeslots | filter: {court:{name:selectedCourt}}">{{timeslot.startMin}}</md-option>
 					        </md-select>
 					      </md-input-container>
-              <md-button class="md-raised md-primary" ng-disabled="reservationForm.$invalid">Reserve</md-button>
+              <md-button class="md-raised md-primary" ng-disabled="reservationForm.$invalid" onclick="onReserve(selectedCourt, selectedTimeSlot)">Reserve</md-button>
 						</form>
 
 					</div>
