@@ -34,7 +34,17 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
     }
   };
 
-  $scope.onReserve = function(selectedCourt, selectedTimeSlot){
+  $scope.onRes = function(selectedCourt, selectedTimeSlot){
+    var basePerson = Restangular.all('person');
+    basePerson.get($scope.user.id).then(function (person) {
+      if (person.reservation === undefined){
+
+      }
+      else{
+
+      }
+    });
     console.log(selectedCourt + selectedTimeSlot);
   };
+
 }]);

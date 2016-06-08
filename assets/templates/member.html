@@ -23,7 +23,7 @@
 					            <md-option ng-value="timeslot.startMin" ng-repeat="timeslot in timeslots | filter: {court:{name:selectedCourt}}">{{timeslot.startMin}}</md-option>
 					        </md-select>
 					      </md-input-container>
-              <md-button class="md-raised md-primary" ng-disabled="reservationForm.$invalid" onclick="onReserve(selectedCourt, selectedTimeSlot)">Reserve</md-button>
+              <md-button class="md-raised md-primary" ng-disabled="reservationForm.$invalid" ng-click="onRes(selectedCourt, selectedTimeSlot)">Reserve</md-button>
 						</form>
 
 					</div>
