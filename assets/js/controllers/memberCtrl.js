@@ -36,9 +36,12 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
 
   $scope.onRes = function(selectedCourt, selectedTimeSlot){
     var basePerson = Restangular.all('person');
+    var base
     basePerson.get($scope.user.id).then(function (person) {
       if (person.reservation === undefined){
-
+        //Get the court
+        //Get the timeslot
+        //Update 
       }
       else{
 
