@@ -1,4 +1,4 @@
-courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', function($scope, $routeParams, Restangular, dataService, $location){
+courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$q', function($scope, $routeParams, Restangular, dataService, $location, $q){
 
   var baseTimeslot = Restangular.all('timeslots');
 
@@ -35,16 +35,25 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
   };
 
   $scope.onRes = function(selectedCourt, selectedTimeSlot){
+
     var basePerson = Restangular.all('person');
-    var base
+    var baseCourt = Restangular.all('court');
+    var baseTimeslot = Restangular.all('timeslot');
+
     basePerson.get($scope.user.id).then(function (person) {
       if (person.reservation === undefined){
         //Get the court
-        //Get the timeslot
-        //Update 
+        baseCourt.get(selectedCourt).then(function (court) {
+          //Get the timeslot
+          baseTimeslot.get(selectedTimeSlot, court).then(function (timeslot) {
+            person.reservation = timeslot;
+            //Update
+            person.save();
+          })
+        })
       }
       else{
-
+        //Do something
       }
     });
     console.log(selectedCourt + selectedTimeSlot);
