@@ -34,29 +34,25 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
     }
   };
 
-  $scope.onRes = function(selectedCourt, selectedTimeSlot){
+  $scope.onRes = function(selectedTimeSlot){
 
     var basePerson = Restangular.all('person');
-    var baseCourt = Restangular.all('court');
-    var baseTimeslot = Restangular.all('timeslot');
+    var baseCourt = Restangular.all('courts');
+    var baseTimeslot = Restangular.all('timeslots');
 
     basePerson.get($scope.user.id).then(function (person) {
       if (person.reservation === undefined){
-        //Get the court
-        baseCourt.get(selectedCourt).then(function (court) {
-          //Get the timeslot
-          baseTimeslot.get(selectedTimeSlot, court).then(function (timeslot) {
-            person.reservation = timeslot;
-            //Update
-            person.save();
-          })
+        //Get the timeslot
+        baseTimeslot.get(selectedTimeSlot).then(function (timeslot) {
+          person.reservation = timeslot;
+          //Update
+          person.save();
         })
       }
       else{
         //Do something
       }
     });
-    console.log(selectedCourt + selectedTimeSlot);
   };
 
 }]);

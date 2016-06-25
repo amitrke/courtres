@@ -14,16 +14,16 @@
 							<md-input-container style="margin-right: 10px;">
 					        <label>Court</label>
 					        <md-select ng-model="selectedCourt" required>
-					          <md-option ng-repeat="thisCourt in facility.courts" value="{{thisCourt.name}}">{{thisCourt.name}}</md-option>
+					          <md-option ng-repeat="thisCourt in facility.courts" value="{{thisCourt.id}}">{{thisCourt.name}}</md-option>
 					        </md-select>
 					      </md-input-container>
 					      <md-input-container>
 					        <label>TimeSlot</label>
 					        <md-select ng-model="selectedTimeSlot" required>
-					            <md-option ng-value="timeslot.startMin" ng-repeat="timeslot in timeslots | filter: {court:{name:selectedCourt}}">{{timeslot.startMin}}</md-option>
+					            <md-option ng-value="timeslot.id" ng-repeat="timeslot in timeslots | filter: {court:{id:selectedCourt}}">{{timeslot.startMin}}</md-option>
 					        </md-select>
 					      </md-input-container>
-              <md-button class="md-raised md-primary" ng-disabled="reservationForm.$invalid" ng-click="onRes(selectedCourt, selectedTimeSlot)">Reserve</md-button>
+              <md-button class="md-raised md-primary" ng-disabled="reservationForm.$invalid" ng-click="onRes(selectedTimeSlot)">Reserve</md-button>
 						</form>
 
 					</div>
