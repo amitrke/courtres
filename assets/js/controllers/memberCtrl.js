@@ -31,6 +31,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
      */
     if (event.verb === 'updated' && event.data.id === $scope.user.id && event.data.checkedInToFacility === $scope.facility.id){
       $scope.checkedInToFacility = event.data.checkedInToFacility;
+      $scope.user = event.data;
     }
   };
 
@@ -55,4 +56,13 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
     });
   };
 
+  $scope.cancelRes = function(){
+
+    var basePerson = Restangular.all('person');
+
+    basePerson.get($scope.user.id).then(function (person) {
+      person.reservation = null;
+      person.save();
+    });
+  };
 }]);
