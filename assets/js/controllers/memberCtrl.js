@@ -1,6 +1,7 @@
 courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', 'dataService', '$location', '$q', function($scope, $routeParams, Restangular, dataService, $location, $q){
 
   var baseTimeslot = Restangular.all('timeslots');
+  var basePerson = Restangular.all('person');
 
   $scope.init = function(){
 
@@ -20,6 +21,14 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
         $scope.timeslots = timeslots;
       });
 
+      basePerson.get($scope.user.id).then(function (person) {
+        $scope.user = person;
+
+        baseTimeslot.get(person.reservation.id).then(function (timeslot) {
+          $scope.user.reservation = timeslot;
+        })
+      });
+
       io.socket.on("person", function(event){$scope.onPersonChange(event);});
     }
   };
@@ -31,7 +40,13 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
      */
     if (event.verb === 'updated' && event.data.id === $scope.user.id && event.data.checkedInToFacility === $scope.facility.id){
       $scope.checkedInToFacility = event.data.checkedInToFacility;
-      $scope.user = event.data;
+
+      basePerson.get(event.data.id).then(function (person) {
+        $scope.user = person;
+        baseTimeslot.get(person.reservation.id).then(function (timeslot) {
+          $scope.user.reservation = timeslot;
+        })
+      });
     }
   };
 
