@@ -12,43 +12,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
       var facility = dataService.getKV('facility');
       var user = dataService.getKV('user');
       if (facility === null || user === null) {
-        //Stub the data.
-        io.socket.get('/person?where={"email":"dennis@gmail.com"}', function (resData) {
-          if (resData.length > 0) {
-            dataService.setKV('user', resData[0]);
-            $scope.user = resData[0];
-            io.socket.get('/facility?where={"name":"BadmintonNC"}', function (resData) {
-              if (resData.length > 0) {
-                dataService.setKV('facility', resData[0]);
-                $scope.facility = resData[0];
-
-                baseTimeslot.getList().then(function (timeslots) {
-                  $scope.allTimeslots = timeslots;
-
-                  var date = new Date();
-                  var minutes = date.getMinutes();
-                  $scope.updateTimeSlotsForCurrentTime(minutes);
-                });
-
-                baseCourt.getList().then(function (courts) {
-                  $scope.allCourts = courts;
-                });
-
-                $scope.updateQueue();
-
-                $scope.courts = [];
-                //setTimeslotDetails($scope.facility);
-
-                //Listen to model change events.
-                io.socket.on("facility", function (event) {
-                  $scope.onFacilityChange(event);
-                })
-                //io.socket.get("/facility", function(resData, jwres) {console.log(resData);})
-                //$location.path( "/" );
-              }
-            });
-          }
-        });
+        $location.path( "/" );
       }
       else {
         $scope.facility = dataService.getKV('facility');
@@ -57,6 +21,10 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 
         baseTimeslot.getList().then(function (timeslots) {
           $scope.allTimeslots = timeslots;
+
+          var date = new Date();
+          var minutes = date.getMinutes();
+          $scope.updateTimeSlotsForCurrentTime(minutes);
         });
 
         baseCourt.getList().then(function (courts) {
