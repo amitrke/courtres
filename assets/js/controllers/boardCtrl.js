@@ -80,7 +80,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
 
       $scope.updateMembersInTimeSlot = function (timeslot, status) {
         _.forEach(timeslot.reservation, function (member) {
-          if (member.status != status) {
+          if (member.status !== status) {
             basePerson.get(member.id).then(function (person) {
               person.status = status;
               person.save();

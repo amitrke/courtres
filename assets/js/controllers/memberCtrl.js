@@ -21,18 +21,22 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
         $scope.timeslots = timeslots;
       });
 
-      basePerson.get($scope.user.id).then(function (person) {
+      $scope.updatePersonObject($scope.user.id);
+
+      io.socket.on("person", function(event){$scope.onPersonChange(event);});
+    }
+  };
+
+  $scope.updatePersonObject = function(personid){
+    basePerson.get(personid).then(function (person) {
         $scope.user = person;
 
         baseTimeslot.get(person.reservation.id).then(function (timeslot) {
           $scope.user.reservation = timeslot;
         })
       });
-
-      io.socket.on("person", function(event){$scope.onPersonChange(event);});
-    }
   };
-
+  
   $scope.onPersonChange = function(event){
     /*
      TODO: 1. If using a local array, then unique items should be maintained.
@@ -40,13 +44,7 @@ courtresApp.controller('MemberCtrl', ['$scope', '$routeParams', 'Restangular', '
      */
     if (event.verb === 'updated' && event.data.id === $scope.user.id && event.data.checkedInToFacility === $scope.facility.id){
       $scope.checkedInToFacility = event.data.checkedInToFacility;
-
-      basePerson.get(event.data.id).then(function (person) {
-        $scope.user = person;
-        baseTimeslot.get(person.reservation.id).then(function (timeslot) {
-          $scope.user.reservation = timeslot;
-        })
-      });
+      $scope.updatePersonObject(event.data.id);
     }
   };
 
