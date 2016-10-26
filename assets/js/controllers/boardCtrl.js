@@ -11,7 +11,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
     $scope.init = function () {
       var facility = dataService.getKV('facility');
       var user = dataService.getKV('user');
-      if (facility === null || user === null) {
+      if (facility === undefined || user === undefined) {
         $location.path( "/" );
       }
       else {
@@ -41,6 +41,10 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
           $scope.onFacilityChange(event);
         })
         io.socket.get("/facility", function (resData, jwres) {
+          console.log(resData);
+        })
+
+        io.socket.get("timeslots", function (resData, jwres) {
           console.log(resData);
         })
       }
