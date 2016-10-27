@@ -22,9 +22,9 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
         baseTimeslot.getList().then(function (timeslots) {
           $scope.allTimeslots = timeslots;
 
-          var date = new Date();
-          var minutes = date.getMinutes();
-          $scope.updateTimeSlotsForCurrentTime(minutes);
+          //var date = new Date();
+          //var minutes = date.getMinutes();
+          //$scope.updateTimeSlotsForCurrentTime(minutes);
         });
 
         baseCourt.getList().then(function (courts) {
@@ -44,12 +44,23 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
           console.log(resData);
         })
 
-        io.socket.get("timeslots", function (resData, jwres) {
+        io.socket.on("timeslots", function (event) {
+          $scope.onTimeslotChange(event);
+        })
+        io.socket.get("/timeslots", function (resData, jwres) {
           console.log(resData);
         })
       }
     };
 
+    $scope.onTimeslotChange = function (event) {
+      console.log(event);
+      baseTimeslot.getList().then(function (timeslots) {
+        $scope.allTimeslots = timeslots;
+      });
+      $scope.updateQueue();
+    };
+/*
     $interval(function () {
       //Get Minutes
       var date = new Date();
@@ -57,7 +68,7 @@ courtresApp.controller('BoardCtrl', ['$scope', '$routeParams', 'Restangular', 'd
       $scope.updateTimeSlotsForCurrentTime(minutes);
 
     }, 10000);
-
+*/
     $scope.updateTimeSlotsForCurrentTime = function (currMinutes) {
       _.forEach($scope.allTimeslots, function (timeslot) {
         if (currMinutes >= timeslot.startMin && currMinutes < timeslot.startMin + timeslot.duration) { //Current time Slot
