@@ -2,10 +2,11 @@
 <html ng-app="courtresApp" ng-cloak>
   <head>
     <title>Court Reservation</title>
-
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="577808984615-h6fgitnl31qu5fsoej8p6sbt51a3vb6j.apps.googleusercontent.com">
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
+
       <!--STYLES-->
       <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
       <link rel="stylesheet" href="/styles/importer.css">
@@ -13,14 +14,15 @@
   </head>
 
   <body>
-     
+
 	<div flex ng-view style="height:100%"></div>
-     
+
     <!--TEMPLATES-->
-    <script type="text/javascript" src="/jst.js"></script>
+    
     <!--TEMPLATES END-->
 
     <script src="/sails.io/sails.io.js"></script>
+
     <!--SCRIPTS-->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
