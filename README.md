@@ -16,7 +16,7 @@ The application can be used by a sports facility to reserve courts for its membe
 * The system logs out all members at the end of day, and they can't reserve the court using smartphone until then are checked in by the facility again.
 * Every court can be configured for time slots, and the system maintains a court reservation queue.
 
-There is a free OpenShift cloud hosted instance of this project, So you don't even have to worry about deployment.
+There is a free OpenShift cloud hosted instance of this project (http://courtres-eduind.rhcloud.com/), So you don't even have to worry about deployment.
 
 Technologies used:
 * [Sails](http://sailsjs.org)
