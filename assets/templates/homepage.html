@@ -1,51 +1,64 @@
 <div ng-cloak layout="column" data-ng-init="init()" ng-controller="FacilityCtrl">
-<form name="userForm">
   <div flex class="md-headline md-padding">
-      Welcome to Court Reservation.<div class="g-signin2" data-onsuccess="onSignIn"></div>
+      Welcome to Court Reservation.
     </div>
-  <div flex>
-    <div class="md-padding">
-        <h1 class="md-title">Login</h1>
-        <div layout="row">
-          <md-input-container>
-            <label>Username</label>
-            <input name="email" ng-model="person.email" required>
-            <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
-              <div ng-message="required">This is required!</div>
-            </div>
-          </md-input-container>
-          <md-input-container>
-            <label>Password</label>
-            <input type="password" ng-model="person.password" required>
-            <div ng-messages="userForm.passwrod.$error" ng-show="userForm.password.$dirty">
-              <div ng-message="required">This is required!</div>
-            </div>
-          </md-input-container>
-          <md-input-container>
-            <label>Facility</label>
-            <md-select ng-model="facility" required>
-              <md-option ng-repeat="facility in allFacilities" value="{{facility.id}}">
-                {{facility.name}}
-              </md-option>
-            </md-select>
-            <div ng-messages="userForm.facility.$error" ng-if="userForm.$dirty">
-              <div ng-message="required">This is required!</div>
-            </div>
-          </md-input-container>
-    </div>
-    <div flex>
-        <md-switch ng-model="rememberMe" aria-label="Switch 1">
-            Remember me
-          </md-switch>
-    </div>
-    <div flex>
-        </div>
-            <md-button class="md-raised md-primary" ng-click="userForm.$valid && login(person, facility, rememberMe)"
-                       ng-disabled="userForm.$invalid">Go</md-button>
-        </div>
-        <div ng-if="authRequest=='failure'">
-              Incorrect username/password !
-            </div>
-    </div>
-</form>
+  <div id="nav">
+    <div id="signin" class="g-signin2"></div>
+    <button id="signout" ng-click="signOut()">Signout</button>
+    <button id="disconnect" ng-click="disconnect()">Disconnect</button>
+  </div>
+
+  <div id="user-details">
+    <table>
+      <tr>
+        <td><img ng-show="user.photo" ng-src="{{ user.photo }}"></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Photo URL: </td>
+        <td>{{ user.photo }}</td>
+      </tr>
+      <tr>
+        <td>User ID: </td>
+        <td>{{ user.id }}</td>
+      </tr>
+      <tr>
+        <td>Full Name: </td>
+        <td>{{ user.fullName }}</td>
+      </tr>
+      <tr>
+        <td>First Name: </td>
+        <td>{{ user.firstName }}</td>
+      </tr>
+      <tr>
+        <td>Last Name: </td>
+        <td>{{ user.lastName }}</td>
+      </tr>
+      <tr>
+        <td>Email: </td>
+        <td>{{ user.email }}</td>
+      </tr>
+      <tr>
+        <td>Domain: </td>
+        <td>{{ user.domain }}</td>
+      </tr>
+      <tr>
+        <td>Timestamp: </td>
+        <td>{{ user.timestamp }}</td>
+      </tr>
+      <tr>
+        <td>IP Address: </td>
+        <td>{{ user.ip }}</td>
+      </tr>
+      <tr>
+        <td>ID Token: </td>
+        <td>{{ user.idToken }}</td>
+      </tr>
+      <tr>
+        <td>Expires At: </td>
+        <td>{{ user.expiresAt }}</td>
+      </tr>
+    </table>
+  </div>
+
 </div>
