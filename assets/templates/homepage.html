@@ -1,64 +1,39 @@
+<script src="https://apis.google.com/js/platform.js?onload=appStart" async defer></script>
+<meta name="google-signin-client_id" content="577808984615-h6fgitnl31qu5fsoej8p6sbt51a3vb6j.apps.googleusercontent.com">
 <div ng-cloak layout="column" data-ng-init="init()" ng-controller="FacilityCtrl">
   <div flex class="md-headline md-padding">
       Welcome to Court Reservation.
     </div>
-  <div id="nav">
-    <div id="signin" class="g-signin2"></div>
-    <button id="signout" ng-click="signOut()">Signout</button>
-    <button id="disconnect" ng-click="disconnect()">Disconnect</button>
-  </div>
+  <div flex>
+    <div ng-if="!user.id" flex id="signin" class="g-signin2" data-onsuccess="onSignIn"></div>
 
-  <div id="user-details">
-    <table>
-      <tr>
-        <td><img ng-show="user.photo" ng-src="{{ user.photo }}"></td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td>Photo URL: </td>
-        <td>{{ user.photo }}</td>
-      </tr>
-      <tr>
-        <td>User ID: </td>
-        <td>{{ user.id }}</td>
-      </tr>
-      <tr>
-        <td>Full Name: </td>
-        <td>{{ user.fullName }}</td>
-      </tr>
-      <tr>
-        <td>First Name: </td>
-        <td>{{ user.firstName }}</td>
-      </tr>
-      <tr>
-        <td>Last Name: </td>
-        <td>{{ user.lastName }}</td>
-      </tr>
-      <tr>
-        <td>Email: </td>
-        <td>{{ user.email }}</td>
-      </tr>
-      <tr>
-        <td>Domain: </td>
-        <td>{{ user.domain }}</td>
-      </tr>
-      <tr>
-        <td>Timestamp: </td>
-        <td>{{ user.timestamp }}</td>
-      </tr>
-      <tr>
-        <td>IP Address: </td>
-        <td>{{ user.ip }}</td>
-      </tr>
-      <tr>
-        <td>ID Token: </td>
-        <td>{{ user.idToken }}</td>
-      </tr>
-      <tr>
-        <td>Expires At: </td>
-        <td>{{ user.expiresAt }}</td>
-      </tr>
-    </table>
+    <div ng-if="user.id" flex>
+      <div class="md-padding">
+        Welcome {{user.fullName}}
+        <form name="userForm">
+        <div layout="row">
+          <md-input-container>
+            <label>Facility</label>
+            <md-select ng-model="facility" required>
+              <md-option ng-repeat="facility in allFacilities" value="{{facility.id}}">
+                {{facility.name}}
+              </md-option>
+            </md-select>
+            <div ng-messages="userForm.facility.$error" ng-if="userForm.$dirty">
+              <div ng-message="required">This is required!</div>
+            </div>
+            </md-input-container>
+        </form>
+        </div>
+      </div>
+      <div flex>
+        <div>
+          <md-button class="md-raised md-primary" ng-click="userForm.$valid && login(person, facility)"
+                              ng-disabled="userForm.$invalid">Go</md-button>
+          <md-button class="md-raised md-primary" ng-click="signOut()">Sign Out</md-button>
+          </div>
+      </div>
+    </div>
   </div>
 
 </div>

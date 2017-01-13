@@ -53,12 +53,7 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     var auth2;
 
     $scope.user = {};
-
-    $timeout(function(){
-      console.log('appStart()');
-      gapi.load('auth2', initSigninV2);
-    }, 3000);
-
+    
     $window.appStart = function() {
       console.log('appStart()');
       gapi.load('auth2', initSigninV2);
