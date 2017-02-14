@@ -53,7 +53,7 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     var auth2;
 
     $scope.user = {};
-    
+
     $window.appStart = function() {
       console.log('appStart()');
       gapi.load('auth2', initSigninV2);
@@ -73,10 +73,10 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     var signinChanged = function(isSignedIn) {
       console.log('signinChanged() = ' + isSignedIn);
       if(isSignedIn) {
-        console.log('the user must be signed in to print this');
         var googleUser = auth2.currentUser.get();
         var authResponse = googleUser.getAuthResponse();
         var profile = googleUser.getBasicProfile();
+        console.log('the user must be signed in to print this :'+profile.getEmail());
         $scope.user.id          = profile.getId();
         $scope.user.fullName    = profile.getName();
         $scope.user.firstName   = profile.getGivenName();
@@ -143,24 +143,11 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
     };
 
     $scope.login = function(person, facility, rememberMe){
-      io.socket.get('/person?where={"email":"'+person.email+'","password":"'+person.password+'"}', function (resData) {
-        if (resData !== null && resData.length > 0){
-          $scope.authRequest = "success";
-          var user = resData[0];
-          dataService.setKV('user', user);
 
-          var expireDate = new Date();
-          expireDate.setDate(expireDate.getDate() + 7);
-
-          if (rememberMe){
-            $cookies.put('username', person.email, {'expires': expireDate});
-            $cookies.put('password', person.password, {'expires': expireDate});
-            //$cookies.put('facility', facility, {'expires': expireDate});
-          }
-          else{
-            $cookies.remove('username');
-            $cookies.remove('password');
-          }
+      io.socket.get('/person?where={"email":"'+$scope.user.email+'"}', function (resData) {
+        var user = resData[0];
+        if (resData !== null && resData.length > 0) {
+          dataService.setKV('user', resData);
 
           baseFacility.get(facility).then(function(fac) {
             $scope.facility = fac;
@@ -171,14 +158,12 @@ courtresApp.controller('FacilityCtrl', ['$scope', '$routeParams', 'Restangular',
             else if (user.type === "member")
               $location.path("/member")
             else
-              console.log("Unknown member type:",user.type)
+              console.log("Unknown member type:",user.type);
           });
-
-
-        }
-        else{
-          $scope.authRequest = "failure";
         }
       });
+
+
+
     };
   }]);
